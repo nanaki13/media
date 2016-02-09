@@ -12,7 +12,6 @@ public class Main {
 		Film film = new Film();
 		File f1 = new File("/home/jonathan/Vidéos/data/Jupiter.avi");
 		File f2 = new File("/home/jonathan/Vidéos/data/arrow/s_04/Arrow.S04E01.FASTSUB.VOSTFR.HDTV.XviD-ZT.zone-telechargement.com.avi");
-		ta
 		film.setPaths(Arrays.asList(f1.toPath(),f2.toPath()));
 		film.play();
 

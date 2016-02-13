@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.nanaki.model.MediaPath;
 
 
-public class StringManager extends SQLManager<MediaPath> implements Manager<String> {
+public class MediaPathManager extends SQLManager<MediaPath> implements Manager<String> {
 
 
 	public MediaPathManager(Connection connection) throws SQLException {
@@ -24,10 +23,10 @@ public class StringManager extends SQLManager<MediaPath> implements Manager<Stri
 	public static String[] FK_DEST = new String[] { "Film.id" };
 	
 	public static String[] SQL_TYPE = new String[] { "INTEGER", "VARCHAR(255) " };
-	public static List<Function<MediaPath, Object>> VALUES = Arrays.asList((f) -> f.getId(), (f) -> f.getName());
+	public static List<Function<MediaPath, Object>> VALUES = Arrays.asList((f) -> f.getFilmId(), (f) -> f.getPath());
 	public static List<FunctionSetter<MediaPath>> SETTERS = Arrays.asList(
-			(f,o) -> f.setId((Integer) o),
-			(f,o) -> f.setName((String) o));
+			(f,o) -> f.setFilmId((Integer) o),
+			(f,o) -> f.setPath((String) o));
 
 	@Override
 	public boolean exists(MediaPath t) {

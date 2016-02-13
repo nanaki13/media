@@ -70,4 +70,9 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 		return SETTERS.get(i);
 	}
 
+	@Override
+	public String[] getFKName() {
+		return null;
+	}
+
 }

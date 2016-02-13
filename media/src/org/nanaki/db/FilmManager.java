@@ -1,14 +1,16 @@
 package org.nanaki.db;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.nanaki.model.Film;
 
 public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 
-	@Override
-	public void update(Film t) {
-		// TODO Auto-generated method stub
-		
-	}
+	public static String[] FIELD_NAME = new String[] { "id", "name" };
+	public static List<Function<Film, Object>> VALUES = Arrays.asList((f) -> f.getId(),(f) -> f.getName());
+	// TODO Auto-generated method stub
 
 	@Override
 	public boolean exists(Film t) {
@@ -22,16 +24,13 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 	}
 
 	@Override
-	public String getParameters() {
-		
-		return "id, name";
+	public String[] getFieldNames() {
+		return FIELD_NAME;
 	}
 
 	@Override
-	public String getValues(Film t) {
-		return t.getId()+", "+t.getName();
+	public List<Function<Film, Object>> getValuesFunction() {
+		return VALUES;
 	}
-
-	
 
 }

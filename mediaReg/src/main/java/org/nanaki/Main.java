@@ -7,8 +7,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.nanaki.db.FilmManager;
+import org.nanaki.db.Manager;
 import org.nanaki.model.Film;
 
 public class Main {
@@ -22,15 +24,18 @@ public class Main {
 		
 		Class.forName("org.sqlite.JDBC");
 	      Connection c = DriverManager.getConnection("jdbc:sqlite:test.db");
-	      FilmManager fm = new FilmManager(c);
-//	      fm.dropTable();
-//	      fm.createTable();
-	      Film t = new Film();
-	      t.setId(2);
-	      t.setName("TOqsdqsdTA");
-		fm.update(t );
-//		fm.save(t);
+	      Manager<Film> fm = new FilmManager(c);
 	      
+	      Film t = new Film();
+//	      t.setId(2);
+	      
+	      t.setName("TOqsdqsdTA");
+//		fm.update(t );
+		fm.save(t);
+//		fm.delete(t);
+		List<Film> by = fm.getBy("name", "TOqsdqsdTA");
+		List<Film> all = fm.getAll();
+		System.out.println(all);
 	      ResultSet executeQuery = c.createStatement().executeQuery("select * from FILM");
 	      print(executeQuery);
 	      c.close();

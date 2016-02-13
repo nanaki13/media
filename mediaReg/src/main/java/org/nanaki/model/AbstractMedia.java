@@ -45,5 +45,11 @@ public abstract class AbstractMedia extends AbstractNomableAndIdentifiable<Integ
 		return DEFAULT_LECTEUR;
 	}
 	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName()+" [realisateurs=" + realisateurs + ", paths=" + paths + ", acteurs=" + acteurs + ", name=" + name
+				+ ", id=" + id + "]";
+	}
+	
 
 }

@@ -1,5 +1,6 @@
 package org.nanaki.db;
 
+import java.nio.file.String;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -7,32 +8,36 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.nanaki.model.Film;
+import org.nanaki.model.MediaPath;
 
-public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 
-	public FilmManager(Connection connection) throws SQLException {
+public class StringManager extends SQLManager<MediaPath> implements Manager<String> {
+
+
+	public MediaPathManager(Connection connection) throws SQLException {
 		super(connection);
 		// TODO Auto-generated constructor stub
 	}
 
-	public static String[] FIELD_NAME = new String[] { "id", "name" };
+	public static String[] FIELD_NAME = new String[] { "idFilm", "name" };
+	public static String[] FK_NAME = new String[] { "idFilm" };
+	public static String[] FK_DEST = new String[] { "Film.id" };
 	
 	public static String[] SQL_TYPE = new String[] { "INTEGER", "VARCHAR(255) " };
-	public static List<Function<Film, Object>> VALUES = Arrays.asList((f) -> f.getId(), (f) -> f.getName());
-	public static List<FunctionSetter<Film>> SETTERS = Arrays.asList(
+	public static List<Function<MediaPath, Object>> VALUES = Arrays.asList((f) -> f.getId(), (f) -> f.getName());
+	public static List<FunctionSetter<MediaPath>> SETTERS = Arrays.asList(
 			(f,o) -> f.setId((Integer) o),
 			(f,o) -> f.setName((String) o));
 
 	@Override
-	public boolean exists(Film t) {
+	public boolean exists(MediaPath t) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public String getTable() {
-		return "FILM";
+		return "MediaPath";
 	}
 
 	@Override
@@ -51,7 +56,7 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 	}
 
 	@Override
-	public Function<Film, Object> getGetterValuesFunction(int i) {
+	public Function<MediaPath, Object> getGetterValuesFunction(int i) {
 		return VALUES.get(i);
 	}
 
@@ -61,13 +66,18 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 	}
 
 	@Override
-	public Supplier<Film> getSupplier() {
-		return Film::new;
+	public Supplier<MediaPath> getSupplier() {
+		return MediaPath::new;
 	}
 
 	@Override
-	public FunctionSetter<Film> getSetterValuesFunction(int i) {
+	public FunctionSetter<MediaPath> getSetterValuesFunction(int i) {
 		return SETTERS.get(i);
 	}
+
+
+
+	
+	
 
 }

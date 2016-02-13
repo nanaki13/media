@@ -1,14 +1,19 @@
 package org.nanaki.db;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Function;
+
+import org.nanaki.model.Film;
 
 public interface Manager<T> {
-	public void save(T t) throws Exception;
-	public void update(T t)throws Exception;
+	public boolean save(T t) throws Exception;
+	public boolean update(T t)throws Exception;
 	public boolean exists(T t)throws Exception;
+	public List<T> getBy(String propName, Object value)throws Exception;
 	public boolean isMultipleStatement();
-	public boolean finishSaveAll();
-	public boolean finishUpdateAll();
+	public boolean finishSaveAll() throws Exception;
+	public boolean finishUpdateAll() throws Exception;
 	public default void saveOrUpdate(T t)throws Exception{
 		if(exists(t)){
 			update(t);
@@ -40,4 +45,6 @@ public interface Manager<T> {
 			finishUpdateAll();
 		}
 	}
+	boolean delete(T t) throws Exception;
+	public List<T> getAll() throws Exception;
 }

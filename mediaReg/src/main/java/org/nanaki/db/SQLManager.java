@@ -2,11 +2,15 @@ package org.nanaki.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
+import org.nanaki.model.Film;
 import org.nanaki.util.Strings;
 
 public abstract class SQLManager<T> implements Manager<T> {
@@ -14,63 +18,131 @@ public abstract class SQLManager<T> implements Manager<T> {
 	private PreparedStatement preparedStatementInsert;
 	private PreparedStatement preparedStatementUpdate;
 
+	private boolean multi;
+
 	public SQLManager(Connection connection) throws SQLException {
 		this.connection = connection;
+		createTable();
 		preparedStatementInsert = connection.prepareStatement(makeInsert());
-		System.out.println(makeUpdate());
 		preparedStatementUpdate = connection.prepareStatement(makeUpdate());
 	}
 
 	@Override
-	public void save(T t) throws SQLException {
-		preparedStatementInsert.clearParameters();
+	public boolean save(T t) throws SQLException {
+		int j;
 		for (int i = 0; i < getFieldNames().length; i++) {
-			preparedStatementInsert.setObject(i + 1, getValuesFunction(i).apply(t));
+
+			if (i != getIdIndex()) {
+				preparedStatementInsert.setObject(autoIncrement(i) + 1, getGetterValuesFunction(i).apply(t));
+			}
 		}
-		preparedStatementInsert.executeUpdate();
+
+		if (multi) {
+			preparedStatementInsert.addBatch();
+			return false;
+		} else {
+			return preparedStatementInsert.execute();
+		}
+
+	}
+
+	private int autoIncrement(int i) {
+		if (isAutoIncrement()) {
+			if (i >= getIdIndex())
+				return i - 1;
+		}
+		return i;
+
 	}
 
 	@Override
-	public void update(T t) throws SQLException {
-//		System.out.println("++ " +preparedStatementInsert.isClosed());
-		preparedStatementUpdate.clearParameters();
-//		System.out.println("++ " +preparedStatementUpdate.isClosed());
-		int fCount = getFieldNames().length ; 
-		for (int i = 0; i < getFieldNames().length; i++) {
-//			System.out.println(getValuesFunction(i).apply(t));
-			System.out.println(i + 1);
-			System.out.println("value : "+getValuesFunction(i).apply(t));
-			preparedStatementUpdate.setObject(i + 1 , getValuesFunction(i).apply(t));
+	public void saveAll(List<T> ts) throws SQLException {
+		multi = true;
+		try {
+			try {
+				Manager.super.saveAll(ts);
+			} catch (Exception e) {
+				throw (SQLException) e;
+			}
+		} finally {
+			multi = false;
 		}
-//		System.out.println(fCount + 1);
-		System.out.println(fCount + 1);
-		System.out.println("value : "+getValuesFunction(fCount - 1).apply(t));
-		preparedStatementUpdate.setObject(fCount + 1, getValuesFunction(getIdIndex()).apply(t));
-		System.out.println("++++   " + preparedStatementUpdate.executeUpdate());
+
+	}
+
+	@Override
+	public void updateAll(List<T> ts) throws SQLException {
+		multi = true;
+		try {
+			try {
+				Manager.super.updateAll(ts);
+			} catch (Exception e) {
+				throw (SQLException) e;
+			}
+		} finally {
+			multi = false;
+		}
+	}
+
+	@Override
+	public boolean delete(T t) throws SQLException {
+		Statement statement = connection.createStatement();
+		return statement.execute("DELETE FROM " + getTable() + " WHERE " + getFieldNames()[getIdIndex()] + " = "
+				+ getGetterValuesFunction(getIdIndex()).apply(t));
+	}
+
+	@Override
+	public boolean update(T t) throws SQLException {
+		int fCount = getFieldNames().length;
+		for (int i = 0; i < getFieldNames().length; i++) {
+			preparedStatementUpdate.setObject(i + 1, getGetterValuesFunction(i).apply(t));
+		}
+		preparedStatementUpdate.setObject(fCount + 1, getGetterValuesFunction(getIdIndex()).apply(t));
+		return preparedStatementUpdate.executeUpdate() == 1;
 
 	}
 
 	private String makeInsert() {
-		return "INSERT INTO " + getTable() + " \n(" + Strings.implode(getFieldNames(), ", ") + ")" + "VALUES " + "("
-				+ Strings.implode("?", ", ", getFieldNames().length) + ")";
+		if (!isAutoIncrement()) {
+			return "INSERT INTO " + getTable() + " \n(" + Strings.implode(getFieldNames(), ", ") + ")" + "VALUES " + "("
+					+ Strings.implode("?", ", ", getFieldNames().length) + ")";
+		} else {
+			return "INSERT INTO " + getTable() + " \n(" + Strings.implode(withouId(getFieldNames()), ", ") + ")"
+					+ "VALUES " + "(" + Strings.implode("?", ", ", getFieldNames().length - 1) + ")";
+		}
+
+	}
+
+	private String[] withouId(String[] fieldNames) {
+		String[] field = new String[fieldNames.length - 1];
+		int j;
+		for (int i = 0; i < field.length; i++) {
+			if (i >= getIdIndex()) {
+				j = i + 1;
+			} else {
+				j = i;
+			}
+			field[i] = fieldNames[j];
+		}
+		return field;
 	}
 
 	private String makeUpdate() {
 		return "UPDATE " + getTable() + " SET " + preparedUpdateField() + " WHERE " + getFieldNames()[getIdIndex()]
 				+ " =  ? ;";
 	}
-	
-	public void createTable() throws SQLException{
-		try(Statement create = connection.createStatement()){
-			create.execute(makeCreate());
+
+	public boolean createTable() throws SQLException {
+		try (Statement create = connection.createStatement()) {
+			return create.execute(makeCreate());
 		}
 	}
-	
+
 	public boolean dropTable() throws SQLException {
-		try(Statement create = connection.createStatement()){
-			return create.execute("DROP TABLE "+getTable());
+		try (Statement create = connection.createStatement()) {
+			return create.execute("DROP TABLE " + getTable());
 		}
-		
+
 	}
 
 	private String makeCreate() {
@@ -83,6 +155,9 @@ public abstract class SQLManager<T> implements Manager<T> {
 			bl.append(fields[i]).append(" ").append(types[i]);
 			if (idIndex == i) {
 				bl.append(" PRIMARY KEY");
+				if (isAutoIncrement()) {
+					bl.append(" AUTOINCREMENT");
+				}
 			}
 			if (i != fields.length - 1) {
 				bl.append(", ");
@@ -108,12 +183,19 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	public abstract int getIdIndex();
 
-	public abstract String[] getFieldNames();
+	public abstract boolean isAutoIncrement();
 
+	public abstract String[] getFieldNames();
 
 	public abstract String[] getSQLType();
 
-	public abstract Function<T, Object> getValuesFunction(int i);
+	public abstract String[] getFKName();
+
+	public abstract Supplier<T> getSupplier();
+
+	public abstract Function<T, Object> getGetterValuesFunction(int i);
+
+	public abstract FunctionSetter<T> getSetterValuesFunction(int i);
 
 	@Override
 	public boolean exists(T t) {
@@ -123,20 +205,81 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	@Override
 	public boolean isMultipleStatement() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean finishSaveAll() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean finishSaveAll() throws SQLException {
+		return preparedStatementInsert.executeBatch().length > 0;
 	}
 
 	@Override
-	public boolean finishUpdateAll() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean finishUpdateAll() throws SQLException {
+		return preparedStatementUpdate.executeBatch().length > 0;
+	}
+
+	@Override
+	public List<T> getBy(String propName, Object f) throws SQLException {
+		List<T> l = new ArrayList<>();
+		try (PreparedStatement statement = connection
+				.prepareStatement("SELECT " + Strings.implode(concat(getFieldNames(), getFKName()), ", ") + " FROM "
+						+ getTable() + " WHERE " + propName + " = ?")) {
+			statement.setObject(1, f);
+			ResultSet executeQuery = statement.executeQuery();
+			while (executeQuery.next()) {
+				T t = getSupplier().get();
+				for (int i = 0; i < getFieldNames().length; i++) {
+					Object object = executeQuery.getObject(i + 1);
+					FunctionSetter<T> setterValuesFunction = getSetterValuesFunction(i);
+					setterValuesFunction.set(t, object);
+				}
+				l.add(t);
+			}
+
+		}
+		return l;
+
+	}
+
+	private String[] concat(String[] fieldNames, String[] fkName) {
+		int l1 = fieldNames.length;
+		int l2 = fkName.length;
+		String[] res = new String[l1 + l2];
+		for (int i = 0; i < l1; i++) {
+			res[i] = fieldNames[i];
+		}
+		for (int i = l1; i < l1 + l2; i++) {
+			res[i] = fkName[i - l1];
+		}
+		return res;
+	}
+
+	@Override
+	public List<T> getAll() throws SQLException {
+		List<T> l = new ArrayList<>();
+		try (PreparedStatement statement = connection
+				.prepareStatement("SELECT " + Strings.implode(getFieldNames(), ", ") + " FROM " + getTable())) {
+			ResultSet executeQuery = statement.executeQuery();
+			while (executeQuery.next()) {
+				T t = getSupplier().get();
+				for (int i = 0; i < getFieldNames().length; i++) {
+					Object object = executeQuery.getObject(i + 1);
+					FunctionSetter<T> setterValuesFunction = getSetterValuesFunction(i);
+					setterValuesFunction.set(t, object);
+				}
+
+				if (haveForeignKey()) {
+					for(int i = 0 ; i < getFKName().length ; i++){
+						Object object = executeQuery.getObject(i + getFieldNames().length);
+						Manager<?> m = getManager(i);
+						m.getBy(getFKNameDistant()[i], value);
+					}
+				}
+				l.add(t);
+			}
+
+		}
+		return l;
 	}
 
 }

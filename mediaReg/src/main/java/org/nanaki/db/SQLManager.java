@@ -4,149 +4,116 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.function.Function;
 
-public abstract class SQLManager<T> implements Manager<T>, AutoCloseable {
+import org.nanaki.util.Strings;
+
+public abstract class SQLManager<T> implements Manager<T> {
 	protected Connection connection;
-	private PreparedStatement prepareStatementInsert;
-	private PreparedStatement prepareStatementUpdate;
-
-	public abstract String getTable();
-
-	public abstract String[] getFieldsName();
-
-	public abstract String[] getSqlTypes();
-
-	public abstract Object[] getValues(T t);
-
-	public abstract int getFieldCount();
-
-	public abstract int getIdInex();
+	private PreparedStatement preparedStatementInsert;
+	private PreparedStatement preparedStatementUpdate;
 
 	public SQLManager(Connection connection) throws SQLException {
 		this.connection = connection;
-		init();
+		preparedStatementInsert = connection.prepareStatement(makeInsert());
+		System.out.println(makeUpdate());
+		preparedStatementUpdate = connection.prepareStatement(makeUpdate());
+	}
+
+	@Override
+	public void save(T t) throws SQLException {
+		preparedStatementInsert.clearParameters();
+		for (int i = 0; i < getFieldNames().length; i++) {
+			preparedStatementInsert.setObject(i + 1, getValuesFunction(i).apply(t));
+		}
+		preparedStatementInsert.executeUpdate();
+	}
+
+	@Override
+	public void update(T t) throws SQLException {
+//		System.out.println("++ " +preparedStatementInsert.isClosed());
+		preparedStatementUpdate.clearParameters();
+//		System.out.println("++ " +preparedStatementUpdate.isClosed());
+		int fCount = getFieldNames().length ; 
+		for (int i = 0; i < getFieldNames().length; i++) {
+//			System.out.println(getValuesFunction(i).apply(t));
+			System.out.println(i + 1);
+			System.out.println("value : "+getValuesFunction(i).apply(t));
+			preparedStatementUpdate.setObject(i + 1 , getValuesFunction(i).apply(t));
+		}
+//		System.out.println(fCount + 1);
+		System.out.println(fCount + 1);
+		System.out.println("value : "+getValuesFunction(fCount - 1).apply(t));
+		preparedStatementUpdate.setObject(fCount + 1, getValuesFunction(getIdIndex()).apply(t));
+		System.out.println("++++   " + preparedStatementUpdate.executeUpdate());
 
 	}
 
-	public void init() throws SQLException {
-		System.out.println(makeInsert());
-		prepareStatementInsert = connection.prepareStatement(makeInsert());
-		System.out.println(makeUpdate());
-		prepareStatementUpdate = connection.prepareStatement(makeUpdate());
+	private String makeInsert() {
+		return "INSERT INTO " + getTable() + " \n(" + Strings.implode(getFieldNames(), ", ") + ")" + "VALUES " + "("
+				+ Strings.implode("?", ", ", getFieldNames().length) + ")";
 	}
 
 	private String makeUpdate() {
-		return "UPDATE " + getTable() + " SET " + getNamedUpdate() + " WHERE " + getFieldsName()[getIdInex()] + "= ?";
+		return "UPDATE " + getTable() + " SET " + preparedUpdateField() + " WHERE " + getFieldNames()[getIdIndex()]
+				+ " =  ? ;";
+	}
+	
+	public void createTable() throws SQLException{
+		try(Statement create = connection.createStatement()){
+			create.execute(makeCreate());
+		}
+	}
+	
+	public boolean dropTable() throws SQLException {
+		try(Statement create = connection.createStatement()){
+			return create.execute("DROP TABLE "+getTable());
+		}
+		
 	}
 
-	private String getNamedUpdate() {
-		StringBuilder bl = new StringBuilder();
-		String[] fieldsName = getFieldsName();
-		for (int i = 0; i < fieldsName.length; i++) {
-			bl.append(fieldsName[i] + " = ? ");
-			if (i != fieldsName.length - 1) {
+	private String makeCreate() {
+		StringBuilder bl = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
+		bl.append(getTable()).append(" (");
+		String[] fields = getFieldNames();
+		String[] types = getSQLType();
+		int idIndex = getIdIndex();
+		for (int i = 0; i < fields.length; i++) {
+			bl.append(fields[i]).append(" ").append(types[i]);
+			if (idIndex == i) {
+				bl.append(" PRIMARY KEY");
+			}
+			if (i != fields.length - 1) {
 				bl.append(", ");
+			}
+		}
+		bl.append(" ) ");
+		return bl.toString();
+	}
+
+	private String preparedUpdateField() {
+		String[] fieldNames = getFieldNames();
+		StringBuilder bl = new StringBuilder();
+		for (int i = 0; i < fieldNames.length; i++) {
+			bl.append(fieldNames[i]).append(" = ? ");
+			if (i != fieldNames.length - 1) {
+				bl.append(" , ");
 			}
 		}
 		return bl.toString();
 	}
 
-	private String makeInsert() {
-		return "INSERT INTO " + getTable() + "(" + implode(getFieldsName(), ",") + ")" + "VALUES " + "("
-				+ repeat("?", ",", getFieldCount()) + ")";
-	}
+	public abstract String getTable();
 
-	private String implode(String[] object, String sep) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for (int i = 0; i < object.length; i++) {
-			stringBuilder.append(object[i]);
-			if (i != object.length - 1) {
-				stringBuilder.append(sep);
-			}
-		}
-		return stringBuilder.toString();
-	}
+	public abstract int getIdIndex();
 
-	private static String repeat(String string, String string2, int fieldCount) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for (int i = 0; i < fieldCount; i++) {
-			stringBuilder.append(string);
-			if (i != fieldCount - 1) {
-				stringBuilder.append(string2);
-			}
-		}
-		return stringBuilder.toString();
-	}
+	public abstract String[] getFieldNames();
 
-	public void dropTable() throws SQLException{
-		try (Statement statement = connection.createStatement()) {
-			System.out.println(createStatement());
-			statement.execute("DROP TABLE "+getTable());
-		}
-	}
-	public void createTable() throws SQLException {
-		try (Statement statement = connection.createStatement()) {
-			System.out.println(createStatement());
-			statement.execute(createStatement());
-		}
-	}
 
-	private String createStatement() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CREATE TABLE IF NOT EXISTS ").append(getTable()).append(" (\n").append(getCreation())
-				.append("\n)");
-		return builder.toString();
-	}
+	public abstract String[] getSQLType();
 
-	private String getCreation() {
-		StringBuilder builder = new StringBuilder();
-		String[] fieldsName = getFieldsName();
-		String[] sqlType = getSqlTypes();
-		for (int i = 0; i < fieldsName.length; i++) {
-			
-			builder.append(fieldsName[i]).append(' ').append(sqlType[i]);
-			if( i == getIdInex()){
-				builder.append("PRIMARY KEY");
-			}
-			if (i != fieldsName.length - 1) {
-				builder.append(" ,\n");
-			}
-		}
-
-		return builder.toString();
-	}
-
-	@Override
-	public void save(T t) throws RuntimeException {
-		Object[] l = getValues(t);
-		try {
-			for (int i = 1; i < l.length +1; i++) {
-
-				prepareStatementInsert.setObject(i, l[i - 1]);
-				
-
-			}
-			prepareStatementInsert.executeUpdate();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-
-	@Override
-	public void update(T t) {
-		Object[] l = getValues(t);
-		try {
-			for (int i = 0; i < l.length; i++) {
-
-				prepareStatementUpdate.setObject(i, l[i]);
-
-			}
-			prepareStatementUpdate.executeUpdate();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	public abstract Function<T, Object> getValuesFunction(int i);
 
 	@Override
 	public boolean exists(T t) {
@@ -154,13 +121,22 @@ public abstract class SQLManager<T> implements Manager<T>, AutoCloseable {
 		return false;
 	}
 
-	public void close() throws SQLException {
-		connection.close();
+	@Override
+	public boolean isMultipleStatement() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	public Connection getConnection() {
-		return connection;
+	@Override
+	public boolean finishSaveAll() {
+		// TODO Auto-generated method stub
+		return false;
 	}
-	
+
+	@Override
+	public boolean finishUpdateAll() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

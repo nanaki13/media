@@ -11,7 +11,9 @@ import java.util.List;
 
 import org.nanaki.db.FilmManager;
 import org.nanaki.db.Manager;
+import org.nanaki.db.PathManager;
 import org.nanaki.model.Film;
+import org.nanaki.model.MediaPath;
 
 public class Main {
 
@@ -25,6 +27,19 @@ public class Main {
 		Class.forName("org.sqlite.JDBC");
 	      Connection c = DriverManager.getConnection("jdbc:sqlite:test.db");
 	      Manager<Film> fm = new FilmManager(c);
+	      PathManager pm = new PathManager(c);
+	      Film t = new Film();
+//	      t.setId(2);
+	      
+	      t.setName("TOqsdqsdTA");
+//		fm.update(t );
+		fm.save(t);
+		
+	      MediaPath mp = new MediaPath();
+	      mp.setIndex(0);
+	      mp.setMedia(t);
+	      
+	      pm.save(mp);
 	      
 	      Film t = new Film();
 //	      t.setId(2);

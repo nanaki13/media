@@ -47,4 +47,5 @@ public interface Manager<T> {
 	}
 	boolean delete(T t) throws Exception;
 	public List<T> getAll() throws Exception;
+	public T getById(Object object);
 }

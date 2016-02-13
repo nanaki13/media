@@ -1,6 +1,5 @@
 package org.nanaki.db;
 
-import java.nio.file.String;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -8,25 +7,37 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.nanaki.model.Media;
+import org.nanaki.model.MediaPath;
 
-
-public class MediaPathManager extends SQLManager<MediaPath> implements Manager<String> {
-
-
-	public MediaPathManager(Connection connection) throws SQLException {
+public class PathManager extends SQLManager<MediaPath> implements Manager<MediaPath> {
+	
+	
+	private FilmManager filmManager ;
+	public PathManager(Connection connection) throws SQLException {
 		super(connection);
+		
 		// TODO Auto-generated constructor stub
 	}
 
-	public static String[] FIELD_NAME = new String[] { "idFilm", "name" };
+	public static String[] FIELD_NAME = new String[] { "index", "path" };
 	public static String[] FK_NAME = new String[] { "idFilm" };
-	public static String[] FK_DEST = new String[] { "Film.id" };
-	
+
+	public static List<FunctionSetter<MediaPath>> FK_SETTER = Arrays.asList((f, o) -> f.setMedia((Media) o));
+
 	public static String[] SQL_TYPE = new String[] { "INTEGER", "VARCHAR(255) " };
-	public static List<Function<MediaPath, Object>> VALUES = Arrays.asList((f) -> f.getFilmId(), (f) -> f.getPath());
-	public static List<FunctionSetter<MediaPath>> SETTERS = Arrays.asList(
-			(f,o) -> f.setFilmId((Integer) o),
-			(f,o) -> f.setPath((String) o));
+	public static List<Function<MediaPath, Object>> VALUES = Arrays.asList((f) -> f.getIndex(), (f) -> f.getPath());
+	public static List<FunctionSetter<MediaPath>> SETTERS = Arrays.asList((f, o) -> f.setIndex((Integer) o),
+			(f, o) -> f.setPath((String) o));
+
+	
+	public FilmManager getFilmManager() {
+		return filmManager;
+	}
+
+	public void setFilmManager(FilmManager filmManager) {
+		this.filmManager = filmManager;
+	}
 
 	@Override
 	public boolean exists(MediaPath t) {
@@ -74,9 +85,30 @@ public class MediaPathManager extends SQLManager<MediaPath> implements Manager<S
 		return SETTERS.get(i);
 	}
 
+	@Override
+	public MediaPath getById(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public String[] getFKName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FunctionSetter<MediaPath> getFKSetter(int i) {
+		return FK_SETTER.get(i);
+	}
+
+	@Override
+	public FilmManager getManager(int i) {
+		return filmManager;
+	}
 
 	
+
 	
 
 }

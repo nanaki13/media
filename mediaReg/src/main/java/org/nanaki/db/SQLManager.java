@@ -11,13 +11,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.nanaki.model.Film;
+import org.nanaki.model.MediaPath;
 import org.nanaki.util.Strings;
 
 public abstract class SQLManager<T> implements Manager<T> {
 	protected Connection connection;
 	private PreparedStatement preparedStatementInsert;
 	private PreparedStatement preparedStatementUpdate;
-
+	
 	private boolean multi;
 
 	public SQLManager(Connection connection) throws SQLException {
@@ -30,6 +31,12 @@ public abstract class SQLManager<T> implements Manager<T> {
 	@Override
 	public boolean save(T t) throws SQLException {
 		int j;
+		for (int i = 0; i < getFieldNames().length; i++) {
+
+			if (i != getIdIndex()) {
+				preparedStatementInsert.setObject(autoIncrement(i) + 1, getGetterValuesFunction(i).apply(t));
+			}
+		}
 		for (int i = 0; i < getFieldNames().length; i++) {
 
 			if (i != getIdIndex()) {
@@ -103,11 +110,12 @@ public abstract class SQLManager<T> implements Manager<T> {
 	}
 
 	private String makeInsert() {
+		String[] concat = concat(getFieldNames(), getFKName());
 		if (!isAutoIncrement()) {
-			return "INSERT INTO " + getTable() + " \n(" + Strings.implode(getFieldNames(), ", ") + ")" + "VALUES " + "("
+			return "INSERT INTO " + getTable() + " \n(" + Strings.implode(concat, ", ") + ")" + "VALUES " + "("
 					+ Strings.implode("?", ", ", getFieldNames().length) + ")";
 		} else {
-			return "INSERT INTO " + getTable() + " \n(" + Strings.implode(withouId(getFieldNames()), ", ") + ")"
+			return "INSERT INTO " + getTable() + " \n(" + Strings.implode(withouId(concat), ", ") + ")"
 					+ "VALUES " + "(" + Strings.implode("?", ", ", getFieldNames().length - 1) + ")";
 		}
 
@@ -150,6 +158,8 @@ public abstract class SQLManager<T> implements Manager<T> {
 		bl.append(getTable()).append(" (");
 		String[] fields = getFieldNames();
 		String[] types = getSQLType();
+		String[] fk = getFKName();
+
 		int idIndex = getIdIndex();
 		for (int i = 0; i < fields.length; i++) {
 			bl.append(fields[i]).append(" ").append(types[i]);
@@ -162,6 +172,16 @@ public abstract class SQLManager<T> implements Manager<T> {
 			if (i != fields.length - 1) {
 				bl.append(", ");
 			}
+		}
+		if(fk != null){
+			for (int i = 0; i < fk.length; i++) {
+				SQLManager<?> manager = getManager(i);
+				bl.append(fk[i]).append(" ").append(manager.getSQLType()[i]).append(" FOREIGN KEY REFERENCES ")
+				.append(manager.getTable()).append("(").append(manager.getFieldNames()[manager.getIdIndex()]).append(")");;
+				if (i != fields.length - 1) {
+					bl.append(", ");
+				}
+			}		
 		}
 		bl.append(" ) ");
 		return bl.toString();
@@ -190,12 +210,17 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public abstract String[] getSQLType();
 
 	public abstract String[] getFKName();
+	
+
+
 
 	public abstract Supplier<T> getSupplier();
 
 	public abstract Function<T, Object> getGetterValuesFunction(int i);
 
 	public abstract FunctionSetter<T> getSetterValuesFunction(int i);
+	public abstract FunctionSetter<T> getFKSetter(int i);
+	public abstract  SQLManager<?> getManager(int i);
 
 	@Override
 	public boolean exists(T t) {
@@ -233,6 +258,15 @@ public abstract class SQLManager<T> implements Manager<T> {
 					FunctionSetter<T> setterValuesFunction = getSetterValuesFunction(i);
 					setterValuesFunction.set(t, object);
 				}
+				if (haveForeignKey()) {
+					for(int i = 0 ; i < getFKName().length ; i++){
+						Object object = executeQuery.getObject(i + getFieldNames().length);
+						Manager<?> m = getManager(i);
+						Object o = m.getById(object);
+						FunctionSetter<T> setter = getFKSetter(i);
+						setter.set(t, o);
+					}
+				}
 				l.add(t);
 			}
 
@@ -258,7 +292,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public List<T> getAll() throws SQLException {
 		List<T> l = new ArrayList<>();
 		try (PreparedStatement statement = connection
-				.prepareStatement("SELECT " + Strings.implode(getFieldNames(), ", ") + " FROM " + getTable())) {
+				.prepareStatement("SELECT " + Strings.implode(concat(getFieldNames(), getFKName()), ", ") + " FROM " + getTable())) {
 			ResultSet executeQuery = statement.executeQuery();
 			while (executeQuery.next()) {
 				T t = getSupplier().get();
@@ -272,7 +306,9 @@ public abstract class SQLManager<T> implements Manager<T> {
 					for(int i = 0 ; i < getFKName().length ; i++){
 						Object object = executeQuery.getObject(i + getFieldNames().length);
 						Manager<?> m = getManager(i);
-						m.getBy(getFKNameDistant()[i], value);
+						Object o = m.getById(object);
+						FunctionSetter<T> setter = getFKSetter(i);
+						setter.set(t, o);
 					}
 				}
 				l.add(t);
@@ -281,5 +317,24 @@ public abstract class SQLManager<T> implements Manager<T> {
 		}
 		return l;
 	}
+
+	
+
+	
+
+	
+
+	private boolean haveForeignKey() {
+		return getFKName()!=null && getFKName().length != 0;
+	}
+
+	@Override
+	public T getById(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	
 
 }

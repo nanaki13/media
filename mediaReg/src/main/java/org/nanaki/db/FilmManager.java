@@ -75,4 +75,18 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 		return null;
 	}
 
+
+	
+	@Override
+	public FunctionSetter<Film> getFKSetter(int i) {
+		return null;
+	}
+
+	@Override
+	public SQLManager<?> getManager(int i) {
+		return null;
+	}
+
+
+
 }

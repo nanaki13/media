@@ -12,8 +12,11 @@ import java.util.List;
 import org.nanaki.db.FilmManager;
 import org.nanaki.db.Manager;
 import org.nanaki.db.PathManager;
+import org.nanaki.db.SQLManager;
+import org.nanaki.db.SerieManager;
 import org.nanaki.model.Film;
 import org.nanaki.model.MediaPath;
+import org.nanaki.model.Serie;
 
 public class Main {
 
@@ -26,33 +29,54 @@ public class Main {
 		
 		Class.forName("org.sqlite.JDBC");
 	      Connection c = DriverManager.getConnection("jdbc:sqlite:test.db");
-	      Manager<Film> fm = new FilmManager(c);
+	      FilmManager fm = new FilmManager(c);
 	      PathManager pm = new PathManager(c);
+//	   
+	     
+	      fm.init();
+	      pm.setFilmManager(fm);
+	      pm.init();
+	      fm.dropTable();
+	      pm.dropTable();
+	      fm.createTable();
+	      pm.createTable();
 	      Film t = new Film();
-//	      t.setId(2);
+	      t.setId(1);
 	      
-	      t.setName("TOqsdqsdTA");
+	      t.setName("TOqsqsxqdqsdTA");
 //		fm.update(t );
 		fm.save(t);
+		Film byId = fm.getById(1);
+		System.out.println(byId);
 		
 	      MediaPath mp = new MediaPath();
 	      mp.setIndex(0);
 	      mp.setMedia(t);
-	      
+	      mp.setPath("/FQQF/QF");
 	      pm.save(mp);
+	      mp = pm.getBy("index_", 0).get(0);
+	      System.out.println(mp.getMedia());
 	      
-	      Film t = new Film();
+	      SerieManager manager = new SerieManager(c);
+	      manager.init();
+	      manager.createTable();
+	      Serie s = new Serie();
+	      s.setName("coucaou");
+	      manager.save(s);
+	      List<Serie> by = manager.getBy("name", "coucaou");
+	      System.out.println(by);
+//	      Film t = new Film();
 //	      t.setId(2);
 	      
-	      t.setName("TOqsdqsdTA");
+//	      t.setName("TOqsdqsdTA");
 //		fm.update(t );
-		fm.save(t);
+//		fm.save(t);
 //		fm.delete(t);
-		List<Film> by = fm.getBy("name", "TOqsdqsdTA");
-		List<Film> all = fm.getAll();
-		System.out.println(all);
-	      ResultSet executeQuery = c.createStatement().executeQuery("select * from FILM");
-	      print(executeQuery);
+//		List<Film> by = fm.getBy("name", "TOqsdqsdTA");
+//		List<Film> all = fm.getAll();
+//		System.out.println(all);
+//	      ResultSet executeQuery = c.createStatement().executeQuery("select * from MediaPath");
+//	      print(executeQuery);
 	      c.close();
 
 	}

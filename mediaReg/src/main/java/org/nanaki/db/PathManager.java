@@ -10,27 +10,41 @@ import java.util.function.Supplier;
 import org.nanaki.model.Media;
 import org.nanaki.model.MediaPath;
 
-public class PathManager extends SQLManager<MediaPath> implements Manager<MediaPath> {
-	
-	
-	private FilmManager filmManager ;
-	public PathManager(Connection connection) throws SQLException {
+public class PathManager extends SQLManager<MediaPath>
+		implements Manager<MediaPath> {
+
+	private FilmManager filmManager;
+
+	public PathManager(Connection connection)
+			throws SQLException {
 		super(connection);
-		
+
 		// TODO Auto-generated constructor stub
 	}
 
-	public static String[] FIELD_NAME = new String[] { "index", "path" };
-	public static String[] FK_NAME = new String[] { "idFilm" };
+	public static final String[] FIELD_NAME = new String[] {
+			"index_", "path" };
+	public static final String[] FK_NAME = new String[] {
+			"idFilm" };
 
-	public static List<FunctionSetter<MediaPath>> FK_SETTER = Arrays.asList((f, o) -> f.setMedia((Media) o));
+	private static final int[] IDS_INDEX = new int[] { 0,
+			2 };
+	public static String[] SQL_TYPE = new String[] {
+			"INTEGER", "VARCHAR(255) " };
 
-	public static String[] SQL_TYPE = new String[] { "INTEGER", "VARCHAR(255) " };
-	public static List<Function<MediaPath, Object>> VALUES = Arrays.asList((f) -> f.getIndex(), (f) -> f.getPath());
-	public static List<FunctionSetter<MediaPath>> SETTERS = Arrays.asList((f, o) -> f.setIndex((Integer) o),
-			(f, o) -> f.setPath((String) o));
+	public static List<FunctionSetter<MediaPath>> FK_SETTER = Arrays
+			.asList((f, o) -> f.setMedia((Media) o));
+	public static List<Function<MediaPath, Object>> FK_GETTER = Arrays
+			.asList((f) -> f.getMedia().getId());
 
 	
+	public static List<Function<MediaPath, Object>> VALUES = Arrays
+			.asList((f) -> f.getIndex(),
+					(f) -> f.getPath());
+	public static List<FunctionSetter<MediaPath>> SETTERS = Arrays
+			.asList((f, o) -> f.setIndex((Integer) o),
+					(f, o) -> f.setPath((String) o));
+
 	public FilmManager getFilmManager() {
 		return filmManager;
 	}
@@ -66,13 +80,14 @@ public class PathManager extends SQLManager<MediaPath> implements Manager<MediaP
 	}
 
 	@Override
-	public Function<MediaPath, Object> getGetterValuesFunction(int i) {
+	public Function<MediaPath, Object> getGetterValuesFunction(
+			int i) {
 		return VALUES.get(i);
 	}
 
 	@Override
 	public boolean isAutoIncrement() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -81,7 +96,8 @@ public class PathManager extends SQLManager<MediaPath> implements Manager<MediaP
 	}
 
 	@Override
-	public FunctionSetter<MediaPath> getSetterValuesFunction(int i) {
+	public FunctionSetter<MediaPath> getSetterValuesFunction(
+			int i) {
 		return SETTERS.get(i);
 	}
 
@@ -93,8 +109,7 @@ public class PathManager extends SQLManager<MediaPath> implements Manager<MediaP
 
 	@Override
 	public String[] getFKName() {
-		// TODO Auto-generated method stub
-		return null;
+		return FK_NAME;
 	}
 
 	@Override
@@ -107,8 +122,15 @@ public class PathManager extends SQLManager<MediaPath> implements Manager<MediaP
 		return filmManager;
 	}
 
-	
+	@Override
+	public Function<MediaPath, Object> getGetterFKFunction(
+			int i) {
+		return FK_GETTER.get(i);
+	}
 
-	
+	@Override
+	public int[] getIdsIndex() {
+		return IDS_INDEX;
+	}
 
 }

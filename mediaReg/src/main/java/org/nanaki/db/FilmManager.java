@@ -87,6 +87,17 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 		return null;
 	}
 
+	@Override
+	public Function<Film, Object> getGetterFKFunction(int i) {
+		return null;
+	}
+
+	@Override
+	public int[] getIdsIndex() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

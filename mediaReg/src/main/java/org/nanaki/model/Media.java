@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public interface Media extends Nomable{
+public interface Media extends Nomable,Identifiable<Integer> {
 
 	public List<Realisateur> getRealisateurs();
 	public List<Acteur> getActeurs();

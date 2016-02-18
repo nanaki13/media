@@ -123,4 +123,10 @@ public class SerieManager extends SQLManager<Serie> {
 		return null;
 	}
 
+	@Override
+	public void link(Serie t, Object o, String fkName) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

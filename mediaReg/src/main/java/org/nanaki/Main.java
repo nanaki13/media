@@ -9,13 +9,19 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+
 import org.nanaki.db.FilmManager;
 import org.nanaki.db.Manager;
+import org.nanaki.db.Pair;
 import org.nanaki.db.PathManager;
+import org.nanaki.db.PersonManager;
+import org.nanaki.db.Relation;
 import org.nanaki.db.SQLManager;
 import org.nanaki.db.SerieManager;
+import org.nanaki.model.Acteur;
 import org.nanaki.model.Film;
 import org.nanaki.model.MediaPath;
+import org.nanaki.model.Personne;
 import org.nanaki.model.Serie;
 
 public class Main {
@@ -29,42 +35,66 @@ public class Main {
 		
 		Class.forName("org.sqlite.JDBC");
 	      Connection c = DriverManager.getConnection("jdbc:sqlite:test.db");
+	      ResultSet executeQuery = c.createStatement().executeQuery("select * from Personne_FILM");
+	      print(executeQuery);
+	      executeQuery.close();
 	      FilmManager fm = new FilmManager(c);
-	      PathManager pm = new PathManager(c);
-//	   
+//	      PathManager pm = new PathManager(c);
 	     
+//	      fm.dropTable();
+//	    pm.dropTable();
+	      SQLManager<Personne> manager = new PersonManager(c);
+	      manager.init();
+	      Personne p = new Acteur();
+	      p.setNom("jonathan");
+	      p.setPrenom("bonnet");
+	      manager.save(p);
+	      p = manager.getById(1);
 	      fm.init();
-	      pm.setFilmManager(fm);
-	      pm.init();
-	      fm.dropTable();
-	      pm.dropTable();
-	      fm.createTable();
-	      pm.createTable();
+//	      pm.setFilmManager(fm);
+//	      pm.init();
+//	      fm.dropTable();
+//	      pm.dropTable();
+//	      fm.createTable();
+//	      pm.createTable();
 	      Film t = new Film();
-	      t.setId(1);
-	      
+	      t.getActeurs();
+//	      t.setId(1);
+//	      
 	      t.setName("TOqsqsxqdqsdTA");
 //		fm.update(t );
 		fm.save(t);
-		Film byId = fm.getById(1);
-		System.out.println(byId);
-		
-	      MediaPath mp = new MediaPath();
-	      mp.setIndex(0);
-	      mp.setMedia(t);
-	      mp.setPath("/FQQF/QF");
-	      pm.save(mp);
-	      mp = pm.getBy("index_", 0).get(0);
-	      System.out.println(mp.getMedia());
+		t = fm.getById(1);
+		System.out.println(t);
+		manager.close();
+		fm.close();
+		Relation relation = new Relation(Arrays.asList(manager,fm));
+
+//		relation.drop(c);
+		relation.create(c);
+		relation.prepareInsert();
+		relation.addToInsert(p,t);
+		relation.doInsert();
+		relation.getAll(t, fm, manager);
+//	      MediaPath mp = new MediaPath();
+//	      mp.setIndex(0);
+//	      mp.setMedia(byId);
+//	      mp.setPath("/FQQF/QF");
+//	      pm.update(mp);
+//	      mp = pm.getBy("idFilm", 1).get(0);
+//	      System.out.println(mp);
+//	      System.out.println(mp.getMedia());
+//	      System.out.println(mp.getMedia().getPaths().get(0));
 	      
-	      SerieManager manager = new SerieManager(c);
-	      manager.init();
-	      manager.createTable();
-	      Serie s = new Serie();
-	      s.setName("coucaou");
-	      manager.save(s);
-	      List<Serie> by = manager.getBy("name", "coucaou");
-	      System.out.println(by);
+//	      SerieManager manager = new SerieManager(c);
+//	      manager.init();
+//	      manager.dropTable();
+//	      manager.createTable();
+//	      Serie s = new Serie();
+//	      s.setName("coucaou");
+//	      manager.save(s);
+//	      List<Serie> by = manager.getBy("name", "coucaou");
+//	      System.out.println(by);
 //	      Film t = new Film();
 //	      t.setId(2);
 	      

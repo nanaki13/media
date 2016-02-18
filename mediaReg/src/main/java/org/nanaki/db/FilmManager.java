@@ -26,7 +26,6 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 
 	@Override
 	public boolean exists(Film t) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -94,8 +93,13 @@ public class FilmManager extends SQLManager<Film> implements Manager<Film> {
 
 	@Override
 	public int[] getIdsIndex() {
+		return new int[]{0};
+	}
+
+	@Override
+	public void link(Film t, Object o, String fkName) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 

@@ -1,6 +1,6 @@
 package org.nanaki.model;
 
-public class Personne {
+public class Personne extends AbstractIndentifiable<Integer> {
 
 	protected String nom;
 	protected String prenom;

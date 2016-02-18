@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.nanaki.model.Personne;
 import org.nanaki.util.Strings;
 
 public abstract class SQLManager<T> implements Manager<T> {
@@ -20,7 +21,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 	private boolean multiStatement;
 	private String[] allField;
 	private Function<T, ?>[] allGetter;
-	private int[] idsIndex;
+	protected int[] idsIndex;
 	private String[] allTypes;
 	private SmartMap<Object, T> cache = new SmartMap<>();
 
@@ -42,7 +43,6 @@ public abstract class SQLManager<T> implements Manager<T> {
 		createTable();
 		preparedStatementInsert = connection
 				.prepareStatement(makeInsert());
-		System.out.println(makeInsert());
 		preparedStatementUpdate = connection
 				.prepareStatement(makeUpdate());
 	}
@@ -80,7 +80,6 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public boolean save(T t) throws SQLException {
 		int j;
 		for (int i = 0; i < allGetter.length; i++) {
-			System.out.println(makeInsert());
 			if (notAutoIndex(i)) {
 				preparedStatementInsert.setObject(
 						autoIncrement(i) + 1,
@@ -152,17 +151,20 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	@Override
 	public boolean delete(T t) throws SQLException {
-		PreparedStatement statement = connection
-				.prepareStatement(makeDeletePrepared());
-		for (int i = 0; i < idsIndex.length; i++) {
-			statement.setObject(i + 1,
-					allGetter[idsIndex[i]]);
+		try(PreparedStatement statement = connection
+				.prepareStatement(makeDeletePrepared());){
+			for (int i = 0; i < idsIndex.length; i++) {
+				statement.setObject(i + 1,
+						allGetter[idsIndex[i]]);
+			}
+			return statement.execute();
 		}
 		
-		return statement.execute();
+		
+		
 
 	}
-
+	
 	private String makeDeletePrepared() {
 		StringBuilder t = new StringBuilder();
 		t.append("DELETE FROM " + getTable() + " WHERE ");
@@ -245,7 +247,6 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public boolean createTable() throws SQLException {
 		try (Statement create = connection
 				.createStatement()) {
-			System.out.println(makeCreate());
 			return create.execute(makeCreate());
 		}
 	}
@@ -353,6 +354,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public abstract FunctionSetter<T> getFKSetter(int i);
 
 	public abstract SQLManager<?> getManager(int i);
+	public abstract void link(T t, Object o, String fkName);
 
 	@Override
 	public boolean exists(T t) {
@@ -392,28 +394,8 @@ public abstract class SQLManager<T> implements Manager<T> {
 			ResultSet executeQuery = statement
 					.executeQuery();
 			while (executeQuery.next()) {
-				T t = getSupplier().get();
-				for (int i = 0; i < getFieldNames().length; i++) {
-					Object object = executeQuery
-							.getObject(i + 1);
-					FunctionSetter<T> setterValuesFunction = getSetterValuesFunction(
-							i);
-					setterValuesFunction.set(t, object);
-				}
-				if (haveForeignKey()) {
-					for (int i = 0; i < getFKName().length; i++) {
-						Object object = executeQuery
-								.getObject(
-										i + getFieldNames().length
-												+ 1);
-						SQLManager<?> m = (SQLManager<?>) getManager(
-								i);
-						Object o = m.getById(object);
-						FunctionSetter<T> setter = getFKSetter(
-								i);
-						setter.set(t, o);
-					}
-				}
+				T t = read(executeQuery);
+				
 				l.add(t);
 			}
 
@@ -474,13 +456,14 @@ public abstract class SQLManager<T> implements Manager<T> {
 		if (haveForeignKey()) {
 			for (int i = 0; i < getFKName().length; i++) {
 				Object object = executeQuery.getObject(
-						i + getFieldNames().length);
+						i + 1 + getFieldNames().length);
 				Manager<?> m = getManager(i);
 				Object o;
 				try {
 					o = m.getById(object);
+					link(t,o,getFKName()[i]);
 				} catch (Exception e) {
-					throw (SQLException) e;
+					throw new SQLException(e);
 				}
 				FunctionSetter<T> setter = getFKSetter(i);
 				setter.set(t, o);
@@ -488,6 +471,8 @@ public abstract class SQLManager<T> implements Manager<T> {
 		}
 		return t;
 	}
+
+	
 
 	private boolean haveForeignKey() {
 		return getFKName() != null
@@ -501,20 +486,34 @@ public abstract class SQLManager<T> implements Manager<T> {
 				+ Strings.implode(allField, ", ") + " FROM "
 				+ getTable() + " WHERE "
 				+ concat(idsIndex, " = ? ", " AND");
-		System.out.println(select);
-		PreparedStatement prepareStatement = connection
-				.prepareStatement(select);
-		for (int i = 0; i < idsIndex.length; i++) {
-			prepareStatement.setObject(i + 1, object);
+		try(PreparedStatement prepareStatement = connection
+				.prepareStatement(select);){
+			for (int i = 0; i < idsIndex.length; i++) {
+				prepareStatement.setObject(i + 1, object);
+			}
+			ResultSet executeQuery = prepareStatement
+					.executeQuery();
+			if (executeQuery.next()) {
+				T read = read(executeQuery);
+				return read;
+			}
 		}
-		ResultSet executeQuery = prepareStatement
-				.executeQuery();
-		if (executeQuery.next()) {
-			T read = read(executeQuery);
-			return read;
-		}
+		
 
 		return null;
+	}
+
+	public String[] getAllFields() {
+		return allField;
+	}
+
+	public String[] getAllTypes() {
+		return allTypes;
+	}
+	
+	public void close() throws SQLException{
+		preparedStatementInsert.close();
+		preparedStatementUpdate.close();
 	}
 
 }

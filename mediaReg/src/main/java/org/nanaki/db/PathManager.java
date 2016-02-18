@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.nanaki.model.Film;
 import org.nanaki.model.Media;
 import org.nanaki.model.MediaPath;
 
@@ -131,6 +132,13 @@ public class PathManager extends SQLManager<MediaPath>
 	@Override
 	public int[] getIdsIndex() {
 		return IDS_INDEX;
+	}
+
+	@Override
+	public void link(MediaPath t, Object o, String fkName) {
+		if( o != null && t != null){
+			o = ((Film) o).getPaths().add(t);
+		}
 	}
 
 }

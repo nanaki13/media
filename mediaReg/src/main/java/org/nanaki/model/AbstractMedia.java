@@ -1,13 +1,14 @@
 package org.nanaki.model;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractMedia extends AbstractNomableAndIdentifiable<Integer> implements Media,Identifiable<Integer> {
 
 
 	protected List<Realisateur> realisateurs;
-	protected List<Path> paths;
+	protected List<MediaPath> paths = new ArrayList<>();
 	protected List<Acteur> acteurs;
 	public static String DEFAULT_LECTEUR = "vlc";
 	
@@ -23,7 +24,7 @@ public abstract class AbstractMedia extends AbstractNomableAndIdentifiable<Integ
 	}
 
 	@Override
-	public List<Path> getPaths() {
+	public List<MediaPath> getPaths() {
 		return paths;
 	}
 
@@ -32,7 +33,7 @@ public abstract class AbstractMedia extends AbstractNomableAndIdentifiable<Integ
 		this.realisateurs = realisateurs;
 	}
 
-	public void setPaths(List<Path> paths) {
+	public void setPaths(List<MediaPath> paths) {
 		this.paths = paths;
 	}
 

@@ -1,5 +1,7 @@
 package org.nanaki.util;
 
+import java.util.function.Function;
+
 public class Strings {
 	/**
 	 * Créer une chaine contenant les élément du tableau séparé par sep.
@@ -10,6 +12,22 @@ public class Strings {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < strs.length; i++) {
 			builder.append(strs[i]);
+			if (i != strs.length - 1) {
+				builder.append(sep);
+			}
+		}
+		return builder.toString();
+	}
+	
+	/**
+	 * Créer une chaine contenant les élément du tableau séparé par sep.
+	 * 
+	 * @return
+	 */
+	public static<T> String implode(T[] strs , Function<T,String> toString, String sep) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < strs.length; i++) {
+			builder.append(toString.apply(strs[i]));
 			if (i != strs.length - 1) {
 				builder.append(sep);
 			}

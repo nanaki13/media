@@ -47,5 +47,6 @@ public interface Manager<T> {
 	}
 	boolean delete(T t) throws Exception;
 	public List<T> getAll() throws Exception;
-	public T getById(Object object) throws Exception;
+	public List<T> getAll(List<Object> ids) throws Exception;
+	public <U extends T> U getById(Object object) throws Exception;
 }

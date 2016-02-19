@@ -35,7 +35,7 @@ public class Main {
 		
 		Class.forName("org.sqlite.JDBC");
 	      Connection c = DriverManager.getConnection("jdbc:sqlite:test.db");
-	      ResultSet executeQuery = c.createStatement().executeQuery("select * from Personne_FILM");
+	      ResultSet executeQuery = c.createStatement().executeQuery("select * from Personne");
 	      print(executeQuery);
 	      executeQuery.close();
 	      FilmManager fm = new FilmManager(c);
@@ -43,12 +43,13 @@ public class Main {
 	     
 //	      fm.dropTable();
 //	    pm.dropTable();
-	      SQLManager<Personne> manager = new PersonManager(c);
+	      PersonManager manager = new PersonManager(c);
 	      manager.init();
-	      Personne p = new Acteur();
+	      Acteur p = new Acteur();
 	      p.setNom("jonathan");
 	      p.setPrenom("bonnet");
 	      manager.save(p);
+	      manager.setSupplier(Acteur::new);
 	      p = manager.getById(1);
 	      fm.init();
 //	      pm.setFilmManager(fm);
@@ -72,10 +73,16 @@ public class Main {
 
 //		relation.drop(c);
 		relation.create(c);
-		relation.prepareInsert();
-		relation.addToInsert(p,t);
-		relation.doInsert();
-		relation.getAll(t, fm, manager);
+//		relation.prepareInsert();
+//		relation.addToInsert(p,t);
+//		relation.doInsert();
+		List<Personne> all = relation.getAll(t, fm, manager);
+		System.out.println(all);
+		manager.filmManager = fm;
+		manager.acteurFilm = relation;
+		manager.setSupplier(Acteur::new);
+		manager.fillFilm(p);
+		System.out.println(p);
 //	      MediaPath mp = new MediaPath();
 //	      mp.setIndex(0);
 //	      mp.setMedia(byId);

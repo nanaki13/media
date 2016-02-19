@@ -2,14 +2,12 @@ package org.nanaki.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
-import org.nanaki.model.Film;
-import org.nanaki.model.Personne;
 
 public class Relation {
 
@@ -18,7 +16,11 @@ public class Relation {
 	private Table table;
 	private PreparedStatement prepareStatement;
 	private Connection connection;
-
+	private ManagerColumns[] managerColumnss;
+	private static class ManagerColumns{
+		SQLManager<?> manager;
+		SQLCol[] sqlCols;
+	}
 	public Relation(List<SQLManager<?>> managers) {
 		super();
 		this.managers = managers;
@@ -26,11 +28,16 @@ public class Relation {
 		StringBuilder tableName = new StringBuilder();
 		int j = 0;
 		SQLCol[] sqlCols = new SQLCol[countIds()];
+		managerColumnss = new ManagerColumns[managers.size()];
 		SQLCol sqlCol;
 		for (SQLManager<?> m : managers) {
 			int[] idsIndex = m.getIdsIndex();
+			ManagerColumns managerColumns = new ManagerColumns();
+			managerColumnss[j] = managerColumns;
 			tableName.append(m.getTable());
 			sqlCol = new SQLCol();
+			managerColumns.manager = m;
+			managerColumns.sqlCols = new SQLCol[idsIndex.length];
 			for (int i = 0; i < idsIndex.length; i++) {
 				
 				sqlCol.setName(
@@ -42,6 +49,7 @@ public class Relation {
 				sqlCol.setTableColumnFk(m.getAllFields()[idsIndex[i]]);
 				sqlCol.setIsId(true);
 				sqlCols[j] = sqlCol;
+				managerColumns.sqlCols[i] = sqlCol;
 			}
 			if (j != managers.size() - 1) {
 				tableName.append("_");
@@ -114,16 +122,44 @@ public class Relation {
 		prepareStatement.executeBatch();
 	}
 
-	public void getAll(Object t, SQLManager<?> tManager,
-			SQLManager<?> distantManager) {
+	public <T> List<T> getAll(Object t, SQLManager<?> tManager,
+			SQLManager<T> distantManager) throws SQLException {
 		int[] ids =  tManager.idsIndex;
-		prepareStatement = connection.prepareStatement(select(tManager));l
-		for(int id : ids){
+		prepareStatement = connection.prepareStatement(select(tManager));
+		for(int i =0 ; i  < ids.length ; i++ ){
+			int id = ids[i];
 			Function<Object, Object> function = (Function<Object, Object>) tManager.getGetterValuesFunction(id);
 			Object idObject = function.apply(t);
-			prepareStatement.setObject(objectIndice, idObject);
+			prepareStatement.setObject(i + 1, idObject);
 		}
+		ResultSet executeQuery = prepareStatement.executeQuery();
+		List<Object> idsDistant = new ArrayList<>();
+		while(executeQuery.next()){
+			
+				SQLCol[] column = getColumn(distantManager);
+				if(column.length == 1){
+					Object object = executeQuery.getObject(column[0].getName());
+					idsDistant.add( object);
+				}	
+		}
+		List<T> all = distantManager.getAll(idsDistant);
+		return all;
 		
+		
+	}
+
+	private String select(SQLManager<?> tManager) {
+		SQLCol[] cols = getColumn(tManager);
+		return table.selectWherePrepared(cols);
+	}
+
+	private SQLCol[] getColumn(SQLManager<?> tManager) {
+		for(ManagerColumns columns : managerColumnss){
+			if(tManager.equals(columns.manager)){
+				return columns.sqlCols;
+			}
+		}
+		return null;
 	}
 
 }

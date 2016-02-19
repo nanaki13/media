@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -24,6 +25,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 	protected int[] idsIndex;
 	private String[] allTypes;
 	private SmartMap<Object, T> cache = new SmartMap<>();
+	private Supplier<? extends T> supplier;
 
 	public SQLManager(Connection connection)
 			throws SQLException {
@@ -37,6 +39,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 		allTypes = initType();
 		allGetter = allGetter();
 		idsIndex = getIdsIndex();
+		supplier = getSupplier();
 		if (idsIndex == null) {
 			idsIndex = new int[] { getIdIndex() };
 		}
@@ -340,7 +343,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	public abstract String[] getFKName();
 
-	public abstract Supplier<T> getSupplier();
+	public abstract Supplier<? extends T> getSupplier();
 
 	public abstract Function<T, Object> getGetterValuesFunction(
 			int i);
@@ -445,7 +448,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	private T read(ResultSet executeQuery)
 			throws SQLException {
-		T t = getSupplier().get();
+		T t = supplier.get();
 		for (int i = 0; i < getFieldNames().length; i++) {
 			Object object = executeQuery.getObject(i + 1);
 			FunctionSetter<T> setterValuesFunction = getSetterValuesFunction(
@@ -480,7 +483,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 	}
 
 	@Override
-	public T getById(Object object) throws SQLException {
+	public <U extends T> U getById(Object object) throws SQLException {
 		
 		String select = "SELECT "
 				+ Strings.implode(allField, ", ") + " FROM "
@@ -495,7 +498,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 					.executeQuery();
 			if (executeQuery.next()) {
 				T read = read(executeQuery);
-				return read;
+				return (U) read;
 			}
 		}
 		
@@ -515,5 +518,37 @@ public abstract class SQLManager<T> implements Manager<T> {
 		preparedStatementInsert.close();
 		preparedStatementUpdate.close();
 	}
+
+	@Override
+	public List<T> getAll(List<Object> ids)
+			throws SQLException {
+		List<T> l = new ArrayList<>();
+		try (PreparedStatement statement = connection
+				.prepareStatement("SELECT "
+						+ Strings.implode(allField, ", ")
+						+ " FROM " + getTable()+ " WHERE "+allField[idsIndex[0]]+" IN "+"( "+Strings.implode("?", ", ", ids.size())+" )") ) {
+			int count = 1;
+			for (Object id : ids) {
+				statement.setObject(count, id);
+				count++;
+			}
+			ResultSet executeQuery = statement
+					.executeQuery();
+			while (executeQuery.next()) {
+				T t = read(executeQuery);
+
+				l.add(t);
+			}
+
+		}
+		return l;
+	}
+
+	public void setSupplier(Supplier<? extends T> supplier) {
+		this.supplier = supplier;
+	}
+	
+	
+	
 
 }

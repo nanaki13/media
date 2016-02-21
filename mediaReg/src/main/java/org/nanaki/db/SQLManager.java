@@ -24,8 +24,8 @@ public abstract class SQLManager<T> implements Manager<T> {
 	private Function<T, ?>[] allGetter;
 	protected int[] idsIndex;
 	private String[] allTypes;
-	private SmartMap<Object, T> cache = new SmartMap<>();
-	private Supplier<? extends T> supplier;
+	private SmartMap<Object,  T> cache = new SmartMap<>();
+//	private Supplier<? extends T> supplier;
 
 	public SQLManager(Connection connection)
 			throws SQLException {
@@ -33,13 +33,15 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void init() throws SQLException {
 
 		allField = concat(getFieldNames(), getFKName());
 		allTypes = initType();
 		allGetter = allGetter();
 		idsIndex = getIdsIndex();
-		supplier = getSupplier();
+		Supplier supplier = getSupplier();
+		cache.supplier = supplier;
 		if (idsIndex == null) {
 			idsIndex = new int[] { getIdIndex() };
 		}
@@ -94,9 +96,35 @@ public abstract class SQLManager<T> implements Manager<T> {
 			preparedStatementInsert.addBatch();
 			return false;
 		} else {
-			return preparedStatementInsert.execute();
+			boolean execute = preparedStatementInsert
+					.execute();
+			if (isAutoIncrement()) {
+				try (Statement s = connection
+						.createStatement()) {
+					ResultSet executeQuery = s
+							.executeQuery("SELECT MAX("
+									+ getAllFields()[idsIndex[0]]
+									+ ") FROM "
+									+ getTable());
+					getSetterValuesFunction(idsIndex[0])
+							.set(t, executeQuery
+									.getObject(1));
+				}
+			}
+			addToCache(t);
+			return execute;
 		}
+		
 
+	}
+
+	private void addToCache(T t) {
+		List<Object> l =new ArrayList<>(idsIndex.length);
+		for(int i = 0 ; i < idsIndex.length ; i++){
+			l.add(allGetter[idsIndex[i]].apply(t));
+		}
+		cache.put(l, t);
+		
 	}
 
 	private boolean notAutoIndex(int i) {
@@ -154,20 +182,17 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	@Override
 	public boolean delete(T t) throws SQLException {
-		try(PreparedStatement statement = connection
-				.prepareStatement(makeDeletePrepared());){
+		try (PreparedStatement statement = connection
+				.prepareStatement(makeDeletePrepared());) {
 			for (int i = 0; i < idsIndex.length; i++) {
 				statement.setObject(i + 1,
 						allGetter[idsIndex[i]]);
 			}
 			return statement.execute();
 		}
-		
-		
-		
 
 	}
-	
+
 	private String makeDeletePrepared() {
 		StringBuilder t = new StringBuilder();
 		t.append("DELETE FROM " + getTable() + " WHERE ");
@@ -257,8 +282,8 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public boolean dropTable() throws SQLException {
 		try (Statement create = connection
 				.createStatement()) {
-			return create
-					.execute("DROP TABLE " + getTable());
+			return create.execute(
+					"DROP TABLE IF EXISTS " + getTable());
 		}
 
 	}
@@ -357,6 +382,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public abstract FunctionSetter<T> getFKSetter(int i);
 
 	public abstract SQLManager<?> getManager(int i);
+
 	public abstract void link(T t, Object o, String fkName);
 
 	@Override
@@ -364,8 +390,6 @@ public abstract class SQLManager<T> implements Manager<T> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	
 
 	@Override
 	public boolean isMultipleStatement() {
@@ -398,7 +422,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 					.executeQuery();
 			while (executeQuery.next()) {
 				T t = read(executeQuery);
-				
+
 				l.add(t);
 			}
 
@@ -448,23 +472,36 @@ public abstract class SQLManager<T> implements Manager<T> {
 
 	private T read(ResultSet executeQuery)
 			throws SQLException {
-		T t = supplier.get();
+		// T t = supplier.get();
+		Object[] values = new Object[getFieldNames().length
+				+ ((haveForeignKey()) ? getFKName().length : 0)];
 		for (int i = 0; i < getFieldNames().length; i++) {
 			Object object = executeQuery.getObject(i + 1);
-			FunctionSetter<T> setterValuesFunction = getSetterValuesFunction(
-					i);
-			setterValuesFunction.set(t, object);
+			values[i] = object;
 		}
 
 		if (haveForeignKey()) {
 			for (int i = 0; i < getFKName().length; i++) {
 				Object object = executeQuery.getObject(
 						i + 1 + getFieldNames().length);
+				values[i + +getFieldNames().length] = object;
+			}
+		}
+		T t = checkCacke(values);
+		for (int i = 0; i < getFieldNames().length; i++) {
+			FunctionSetter<T> setterValuesFunction = getSetterValuesFunction(
+					i);
+			setterValuesFunction.set(t, values[i]);
+		}
+
+		if (haveForeignKey()) {
+			for (int i = 0; i < getFKName().length; i++) {
+				
 				Manager<?> m = getManager(i);
 				Object o;
 				try {
-					o = m.getById(object);
-					link(t,o,getFKName()[i]);
+					o = m.getById(values[i + getFieldNames().length]);
+					link(t, o, getFKName()[i]);
 				} catch (Exception e) {
 					throw new SQLException(e);
 				}
@@ -475,7 +512,13 @@ public abstract class SQLManager<T> implements Manager<T> {
 		return t;
 	}
 
-	
+	private T checkCacke(Object[] values) {
+		List<Object> l = new ArrayList<>(idsIndex.length);
+		for(int i = 0 ; i < idsIndex.length ; i++){
+			l.add(values[idsIndex[i]]);
+		}
+		return cache.getOrCreate(l);
+	}
 
 	private boolean haveForeignKey() {
 		return getFKName() != null
@@ -483,25 +526,43 @@ public abstract class SQLManager<T> implements Manager<T> {
 	}
 
 	@Override
-	public <U extends T> U getById(Object object) throws SQLException {
-		
+	public <U extends T> U getById(Object object)
+			throws SQLException {
+
 		String select = "SELECT "
 				+ Strings.implode(allField, ", ") + " FROM "
 				+ getTable() + " WHERE "
 				+ concat(idsIndex, " = ? ", " AND");
-		try(PreparedStatement prepareStatement = connection
-				.prepareStatement(select);){
-			for (int i = 0; i < idsIndex.length; i++) {
-				prepareStatement.setObject(i + 1, object);
+		if (!(object instanceof Object[])){
+			try (PreparedStatement prepareStatement = connection
+					.prepareStatement(select);) {
+				for (int i = 0; i < idsIndex.length; i++) {
+					prepareStatement.setObject(i + 1,
+							object);
+				}
+				ResultSet executeQuery = prepareStatement
+						.executeQuery();
+				if (executeQuery.next()) {
+					T read = read(executeQuery);
+					return (U) read;
+				}
 			}
-			ResultSet executeQuery = prepareStatement
-					.executeQuery();
-			if (executeQuery.next()) {
-				T read = read(executeQuery);
-				return (U) read;
+		}else{
+			try (PreparedStatement prepareStatement = connection
+					.prepareStatement(select);) {
+				for (int i = 0; i < idsIndex.length; i++) {
+					prepareStatement.setObject(i + 1,
+							((Object[])object)[i]);
+				}
+				ResultSet executeQuery = prepareStatement
+						.executeQuery();
+				if (executeQuery.next()) {
+					T read = read(executeQuery);
+					return (U) read;
+				}
 			}
 		}
-		
+			
 
 		return null;
 	}
@@ -513,8 +574,8 @@ public abstract class SQLManager<T> implements Manager<T> {
 	public String[] getAllTypes() {
 		return allTypes;
 	}
-	
-	public void close() throws SQLException{
+
+	public void close() throws SQLException {
 		preparedStatementInsert.close();
 		preparedStatementUpdate.close();
 	}
@@ -526,7 +587,11 @@ public abstract class SQLManager<T> implements Manager<T> {
 		try (PreparedStatement statement = connection
 				.prepareStatement("SELECT "
 						+ Strings.implode(allField, ", ")
-						+ " FROM " + getTable()+ " WHERE "+allField[idsIndex[0]]+" IN "+"( "+Strings.implode("?", ", ", ids.size())+" )") ) {
+						+ " FROM " + getTable() + " WHERE "
+						+ allField[idsIndex[0]] + " IN "
+						+ "( " + Strings.implode("?", ", ",
+								ids.size())
+						+ " )")) {
 			int count = 1;
 			for (Object id : ids) {
 				statement.setObject(count, id);
@@ -544,11 +609,9 @@ public abstract class SQLManager<T> implements Manager<T> {
 		return l;
 	}
 
-	public void setSupplier(Supplier<? extends T> supplier) {
-		this.supplier = supplier;
+	public void setSupplier(
+			Supplier<? extends T> supplier) {
+		cache.supplier = (Supplier) supplier;
 	}
-	
-	
-	
 
 }

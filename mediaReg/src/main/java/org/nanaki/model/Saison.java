@@ -1,9 +1,10 @@
 package org.nanaki.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Saison extends AbstractIndentifiable<String>{
-	private List<Episode> episodes;
+public class Saison extends AbstractIndentifiable<Integer>{
+	private List<Episode> episodes = new ArrayList<>();
 	private Serie serie;
 	private int numero;
 	public List<Episode> getEpisodes() {
@@ -24,13 +25,7 @@ public class Saison extends AbstractIndentifiable<String>{
 	public void setSerie(Serie serie) {
 		this.serie = serie;
 	}
-	@Override
-	public String getId() {
-		if(id == null){
-			id = serie.id+"#"+numero;
-		}
-		return id;
-	}
+	
 	
 	
 }

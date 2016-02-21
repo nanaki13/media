@@ -7,16 +7,17 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.nanaki.model.AbstractMedia;
 import org.nanaki.model.Film;
 import org.nanaki.model.Media;
 import org.nanaki.model.MediaPath;
 
-public class PathManager extends SQLManager<MediaPath>
+public class EpisodePathManager extends SQLManager<MediaPath>
 		implements Manager<MediaPath> {
 
-	private FilmManager filmManager;
+	private EpisodeManager episodeManager;
 
-	public PathManager(Connection connection)
+	public EpisodePathManager(Connection connection)
 			throws SQLException {
 		super(connection);
 
@@ -26,7 +27,7 @@ public class PathManager extends SQLManager<MediaPath>
 	public static final String[] FIELD_NAME = new String[] {
 			"index_", "path" };
 	public static final String[] FK_NAME = new String[] {
-			"idFilm" };
+			"idEpisode" };
 
 	private static final int[] IDS_INDEX = new int[] { 0,
 			2 };
@@ -46,12 +47,12 @@ public class PathManager extends SQLManager<MediaPath>
 			.asList((f, o) -> f.setIndex((Integer) o),
 					(f, o) -> f.setPath((String) o));
 
-	public FilmManager getFilmManager() {
-		return filmManager;
+	public EpisodeManager getFilmManager() {
+		return episodeManager;
 	}
 
-	public void setFilmManager(FilmManager filmManager) {
-		this.filmManager = filmManager;
+	public void setEpisodeManager(EpisodeManager filmManager) {
+		this.episodeManager = filmManager;
 	}
 
 	@Override
@@ -119,8 +120,8 @@ public class PathManager extends SQLManager<MediaPath>
 	}
 
 	@Override
-	public FilmManager getManager(int i) {
-		return filmManager;
+	public EpisodeManager getManager(int i) {
+		return episodeManager;
 	}
 
 	@Override
@@ -137,7 +138,7 @@ public class PathManager extends SQLManager<MediaPath>
 	@Override
 	public void link(MediaPath t, Object o, String fkName) {
 		if( o != null && t != null){
-			o = ((Film) o).getPaths().add(t);
+			o = ((AbstractMedia) o).getPaths().add(t);
 		}
 	}
 

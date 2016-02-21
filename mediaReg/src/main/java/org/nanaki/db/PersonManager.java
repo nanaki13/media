@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.nanaki.model.Acteur;
-import org.nanaki.model.Film;
-import org.nanaki.model.Personne;
+import org.nanaki.model.Media;
 import org.nanaki.model.Personne;
 
 public class PersonManager extends SQLManager<Personne> {
@@ -19,7 +17,7 @@ public class PersonManager extends SQLManager<Personne> {
 		super(connection);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public Relation acteurFilm;
 	public FilmManager filmManager;
 
@@ -29,7 +27,7 @@ public class PersonManager extends SQLManager<Personne> {
 			"prenom" };
 
 	public static String[] SQL_TYPE = new String[] {
-			"INTEGER", 
+			"INTEGER",
 			"VARCHAR(255)",
 			"VARCHAR(255)" };
 	public static List<Function<Personne, Object>> VALUES = Arrays
@@ -114,12 +112,11 @@ public class PersonManager extends SQLManager<Personne> {
 		// TODO Auto-generated method stub
 
 	}
-	
-	public void fillFilm(Acteur a) throws SQLException{
-		List<Film> all = acteurFilm.getAll(a, this, filmManager);
-		a.setFilm(all);
-	}
 
-	
+	public void fillFilm(Personne a) throws SQLException {
+		List<? extends Media> all = acteurFilm.getAll(a,
+				this, filmManager);
+		a.setMediasActeur(all);
+	}
 
 }

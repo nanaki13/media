@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.nanaki.model.Saison;
 import org.nanaki.model.Serie;
 
 public class SerieManager extends SQLManager<Serie> {
@@ -19,6 +20,8 @@ public class SerieManager extends SQLManager<Serie> {
 
 		// TODO Auto-generated constructor stub
 	}
+	
+	private SaisonManager saisonManager;
 
 	public static final String[] FIELD_NAME = new String[] {
 			"id", "name" };
@@ -88,11 +91,6 @@ public class SerieManager extends SQLManager<Serie> {
 		return SETTERS.get(i);
 	}
 
-	@Override
-	public Serie getById(Object object) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String[] getFKName() {
@@ -127,6 +125,11 @@ public class SerieManager extends SQLManager<Serie> {
 	public void link(Serie t, Object o, String fkName) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void fillSaison(Serie e) throws SQLException{
+		List<Saison> by = saisonManager.getBy(saisonManager.getFKName()[SaisonManager.ID_SERIE], e.getId());
+		e.setSaisons(by);
 	}
 
 }

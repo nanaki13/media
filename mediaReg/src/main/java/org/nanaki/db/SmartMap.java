@@ -10,7 +10,7 @@ public class SmartMap<T1, T2> extends HashMap<T1, T2>{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	Supplier<T2> supplier ;
+	Supplier<? extends T2> supplier ;
 	public T2 getOrCreate(T1 t){
 		T2 t2 = get(t);
 		if(t2 == null){

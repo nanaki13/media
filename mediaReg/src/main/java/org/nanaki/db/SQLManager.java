@@ -532,7 +532,7 @@ public abstract class SQLManager<T> implements Manager<T> {
 		String select = "SELECT "
 				+ Strings.implode(allField, ", ") + " FROM "
 				+ getTable() + " WHERE "
-				+ concat(idsIndex, " = ? ", " AND");
+				+ concat(idsIndex, " = ? ", " AND ");
 		if (!(object instanceof Object[])){
 			try (PreparedStatement prepareStatement = connection
 					.prepareStatement(select);) {

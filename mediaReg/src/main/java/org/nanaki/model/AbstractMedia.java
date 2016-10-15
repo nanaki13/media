@@ -9,6 +9,7 @@ public abstract class AbstractMedia extends AbstractNomableAndIdentifiable<Integ
 	protected List<Personne> realisateurs;
 	protected List<MediaPath> paths = new ArrayList<>();
 	protected List<Personne> acteurs;
+	protected List<Role> roles;
 	public static String DEFAULT_LECTEUR = "vlc";
 	
 
@@ -38,6 +39,16 @@ public abstract class AbstractMedia extends AbstractNomableAndIdentifiable<Integ
 
 	public void setActeurs(List<Personne> acteurs) {
 		this.acteurs = acteurs;
+	}
+	
+	
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override

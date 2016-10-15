@@ -7,11 +7,18 @@ import java.sql.SQLException;
 
 import org.nanaki.db.EpisodeManager;
 import org.nanaki.db.EpisodePathManager;
+import org.nanaki.db.FilmManager;
+import org.nanaki.db.PersonManager;
+import org.nanaki.db.RoleManager;
+import org.nanaki.db.SQLManager;
 import org.nanaki.db.SaisonManager;
 import org.nanaki.db.SerieManager;
 import org.nanaki.model.Episode;
+import org.nanaki.model.Film;
 import org.nanaki.model.Media;
 import org.nanaki.model.MediaPath;
+import org.nanaki.model.Personne;
+import org.nanaki.model.Role;
 import org.nanaki.model.Saison;
 import org.nanaki.model.Serie;
 
@@ -72,6 +79,37 @@ public class Main {
 		episodePathManager.save(m);
 		
 		m = episodePathManager.getBy("path", "test").get(0);
+		RoleManager roleManager = new RoleManager(c);
+		
+		SQLManager<Film> managerFilm = new FilmManager(c);
+		managerFilm.init();
+		managerFilm.dropTable();
+		managerFilm.createTable();
+		SQLManager<Personne> managerPersonne = new PersonManager(c);
+		managerPersonne.init();
+		managerPersonne.dropTable();
+		managerPersonne.createTable();
+		Personne p = new Personne();
+		p.setNom("bob");
+		managerPersonne.save(p);
+		Film f = new Film();
+		f.setName("la mouche");
+		managerFilm.save(f);
+		Role r = new Role();
+		r.setId(1);
+		r.setMedia(f);
+		r.setName("le diable");
+		r.setInterprete(p);
+		roleManager.setManagerFilm(managerFilm );
+		roleManager.setManagerPersonne(managerPersonne);
+		roleManager.init();
+		roleManager.dropTable();
+		roleManager.createTable();
+		roleManager.save(r);
+		executeQuery = c.createStatement()
+				.executeQuery("select * from Role");
+		print(executeQuery);
+		Role byId = roleManager.getById(new Object[]{1,1,1});
 		c.close();
 
 	}

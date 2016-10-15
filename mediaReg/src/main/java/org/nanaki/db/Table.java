@@ -10,11 +10,13 @@ public class Table {
 	private String name;
 	private SQLCol[] sqlCols;
 	private SQLCol[] fkCols;
+	private SQLCol[] idCols;
 
 	public Table(String tableName, SQLCol[] sqlCols) {
 		this.name = tableName;
 		this.sqlCols = sqlCols;
 		fkCols = filter(sqlCols , (e) -> e.isFk() );
+		idCols = filter(sqlCols , (e) -> e.isId() );
 	}
 
 	private static SQLCol[] filter(SQLCol[] sqlCols,
@@ -45,7 +47,7 @@ public class Table {
 		builder.append(this.name).append(" (");
 		builder.append(Strings.implode(sqlCols, nameAndType, ", "));
 		builder.append("\n,Primary Key ( ");
-		builder.append(Strings.implode(sqlCols, name, ", "));
+		builder.append(Strings.implode(idCols, name, ", "));
 		builder.append(" ), ");
 		builder.append(Strings.implode(fkCols, fk, ", "));
 		

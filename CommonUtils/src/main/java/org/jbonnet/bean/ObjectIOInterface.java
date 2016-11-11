@@ -1,14 +1,14 @@
-package org.jbonnet.io;
+package org.jbonnet.bean;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-public interface ObjectIOInterface<O> {
+public interface ObjectIOInterface {
 	public static final Object DEFAULT_SEPARATOR = ", ";
-	public Object getFrom(String field, O read) throws  Exception;
-	public  void setTo(String field, O write, Object value) throws Exception;
+	public Object getFrom(String field, Object read) ;
+	public  void setTo(String field, Object write, Object value) ;
 	public Collection<String> getFields();
-	public default String string(O o){
+	public default String string(Object o){
 		Collection<String> fields = getFields();
 		Iterator<String> iterator = fields.iterator();
 		
@@ -30,5 +30,10 @@ public interface ObjectIOInterface<O> {
 	}
 	public default Object getSeparator(){
 		return DEFAULT_SEPARATOR;
+	}
+	public static class Factory{
+		public static ObjectIOInterface getInstance(Class<?> c){
+			return ReflectIOInterface.getInstance(c);
+		}
 	}
 }

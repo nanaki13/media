@@ -1,8 +1,9 @@
-package org.jbonnet.io;
+package org.jbonnet.bean;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -19,26 +20,26 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ReflectIOInterface<T> implements ObjectIOInterface<T> {
+class ReflectIOInterface implements ObjectIOInterface {
 
-	private Class<? extends T> clazz;
+	private Class<?> clazz;
 	private Map<String, Method> setters;
 	private Map<String, Method> getters;
 	private static String SET = "set";
 	private static String GET = "get";
 	private static String IS = "is";
-	private static Map<Class<?>, ReflectIOInterface<?>> instances = Collections.synchronizedMap(new HashMap<>());
+	private static Map<Class<?>, ReflectIOInterface> instances = Collections.synchronizedMap(new HashMap<>());
 
-	public static <U> ReflectIOInterface<U> getInstance(Class<U> c) {
-		ReflectIOInterface<?> reflectIOInterface = instances.get(c);
+	static <U> ReflectIOInterface getInstance(Class<U> c) {
+		ReflectIOInterface reflectIOInterface = instances.get(c);
 		if (reflectIOInterface == null) {
-			reflectIOInterface = new ReflectIOInterface<>(c);
+			reflectIOInterface = new ReflectIOInterface(c);
 			instances.put(c, reflectIOInterface);
 		}
-		return (ReflectIOInterface<U>) reflectIOInterface;
+		return (ReflectIOInterface) reflectIOInterface;
 	}
 
-	private ReflectIOInterface(Class<? extends T> clazz) {
+	private ReflectIOInterface(Class<?> clazz) {
 		this.clazz = clazz;
 		Method[] methods = clazz.getMethods();
 		List<Method> l = new ArrayList<>(Arrays.asList(methods));
@@ -60,20 +61,28 @@ public class ReflectIOInterface<T> implements ObjectIOInterface<T> {
 	}
 
 	@Override
-	public Object getFrom(String field, T read) throws ReflectiveOperationException {
+	public Object getFrom(String field, Object read)  {
 		if (!getters.containsKey(field)) {
 			throw new IllegalArgumentException("field : no getter field");
 		}
-		return getters.get(field).invoke(read);
+		try {
+			return getters.get(field).invoke(read);
+		} catch (ReflectiveOperationException e) {
+			throw new IllegalStateException(e);
+		}
 
 	}
 
 	@Override
-	public void setTo(String field, T write, Object value) throws ReflectiveOperationException {
+	public void setTo(String field, Object write, Object value)  {
 		if (!setters.containsKey(field)) {
 			throw new IllegalArgumentException("no getter field");
 		}
-		setters.get(field).invoke(write, value);
+		try {
+			setters.get(field).invoke(write, value);
+		} catch (ReflectiveOperationException e) {
+			throw new IllegalStateException(e);
+		} 
 
 	}
 
@@ -82,10 +91,10 @@ public class ReflectIOInterface<T> implements ObjectIOInterface<T> {
 		return new HashSet<>(getters.keySet());
 	}
 	
-	public T readProperties(String p) throws IOException{
+	public Object readProperties(String p) throws IOException{
 		
 		try(InputStream i = new FileInputStream(p)){
-			T newInstance = clazz.newInstance();
+			Object newInstance = clazz.newInstance();
 			Properties properties = new Properties();
 			properties.load(i);
 			Set<Entry<Object,Object>> entrySet = properties.entrySet();

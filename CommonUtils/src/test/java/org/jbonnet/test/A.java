@@ -1,6 +1,8 @@
 package org.jbonnet.test;
 
-public class A{
+import org.jbonnet.bean.SetterGetterStringAccess;
+
+public class A implements SetterGetterStringAccess{
 	String name;
 	String prenom;
 	public String getName() {

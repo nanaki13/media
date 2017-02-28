@@ -38,6 +38,9 @@ public class Season implements Serializable {
 	 */
 	public void setSeries(Sery sery) {
 		this.series = sery;
+		if(id == null){
+			id = new SeasonPK();
+		}
 		id.setSeriesKey(sery.getId());
 	}
 

@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 class ReflectIOInterface implements ObjectIOInterface {
 
+	private static final String GET_CLASS = "getClass";
 	private Class<?> clazz;
 	private Map<String, Method> setters;
 	private Map<String, Method> getters;
@@ -51,7 +52,7 @@ class ReflectIOInterface implements ObjectIOInterface {
 				&& m.getName().startsWith(SET)).collect(Collectors.toMap(keyMapperSetter, valueMapper));
 		getters = l.stream()
 				.filter((m) -> !Modifier.isStatic(m.getModifiers()) && m.getParameterTypes().length == 0
-						&& (m.getName().startsWith(GET)) || m.getName().startsWith(IS))
+						&& (m.getName().startsWith(GET) || m.getName().startsWith(IS)) && !m.getName().startsWith(GET_CLASS))
 				.collect(Collectors.toMap(keyMapperGetter, valueMapper));
 
 	}
@@ -105,6 +106,11 @@ class ReflectIOInterface implements ObjectIOInterface {
 		} catch (ReflectiveOperationException e) {
 			throw new IOException(e);
 		} 
+	}
+
+	@Override
+	public Class<?> getType(String field) {
+		return getters.get(field).getReturnType();
 	}
 
 }

@@ -34,7 +34,7 @@ public class RepositoriesImpl implements Repositories {
 		movieType = mediaTypeRepository.findByName("movie");
 		if (movieType == null) {
 			movieType = new MediaType();
-			movieType.setName("series");
+			movieType.setName("movie");
 			movieType = mediaTypeRepository.save(movieType);
 		}
 	}

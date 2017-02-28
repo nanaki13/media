@@ -1,5 +1,6 @@
 package org.jbonnet.lang;
 
+import java.lang.reflect.Method;
 import java.util.function.Function;
 
 public class Strings {
@@ -49,5 +50,21 @@ public class Strings {
 			}
 		}
 		return builder.toString();
+	}
+
+	public static Object convertTo(Class<?> type, String text) {
+		if( text == null) {
+			return null;
+		}
+		if(type == String.class){
+			return text;
+		}
+		try {
+			Method method = type.getMethod("valueOf", String.class);
+			return method.invoke(null, text);
+		} catch (ReflectiveOperationException e) {
+			
+		}
+		return null;
 	}
 }

@@ -17,6 +17,8 @@ package app;
 
 import javafx.application.Application;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -27,12 +29,13 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
 
 	private static String[] savedArgs;
 
-	private ConfigurableApplicationContext applicationContext;
+	protected ConfigurableApplicationContext applicationContext;
 
 	@Override
 	public void init() throws Exception {
 		applicationContext = SpringApplication.run(getClass(), savedArgs);
 		applicationContext.getAutowireCapableBeanFactory().autowireBean(this);
+		Arrays.asList(applicationContext.getBeanDefinitionNames()).stream().sorted().forEach((e)-> System.out.println(e+" = "+applicationContext.getBean(e)));
 	}
 
 	@Override

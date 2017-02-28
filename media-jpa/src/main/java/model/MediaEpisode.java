@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.jar.Attributes.Name;
 
 import javax.persistence.Column;
@@ -79,6 +80,16 @@ public class MediaEpisode extends Media implements Serializable {
 	@Override
 	public String toString() {
 		return "MediaEpisode [season=" + season + ", episodeNumber=" + episodeNumber + "]";
+	}
+
+	public void addAll(List<MediaFilePath> tmpSave) {
+		if(getId() != null){
+			for(MediaFilePath m : tmpSave){
+				m.getId().setMediaId(getId());
+			}
+		}
+		getPaths().addAll(tmpSave);
+		
 	}
 	
 

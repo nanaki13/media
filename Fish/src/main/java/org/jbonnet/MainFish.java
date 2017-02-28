@@ -9,16 +9,22 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -28,12 +34,14 @@ public class MainFish extends Application {
 	private static final int SIZE_EAU_Y = 28;
 	private static final int SIZE_X = SIZE_EAU_X + 2;
 	private static final int SIZE_Y = SIZE_EAU_Y + 2;
-	private static final int SIZE_CASE_X = 20;
-	private static final int SIZE_CASE_Y = 20;
-	private static final int MARGE = 1;
-	private static final Image FOND1 = getImage("/img/fond1.png", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
-	private static final Image FOND2 = getImage("/img/fond2.png", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);;
-	private static final Image FOND3 = getImage("/img/fond3.png", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);;
+	private static final int SIZE_CASE_X = 60;
+	private static final int SIZE_CASE_Y = 60;
+	private static final int MARGE = 3;
+	private static final Image FOND1 = getImage("/img/fond1.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
+	private static final Image FOND2 = getImage("/img/fond2.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
+	private static final Image FOND3 = getImage("/img/fond3.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
+	private static final Image FOND4 = getImage("/img/fond4.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
+	private static final Image[] images = {FOND1,FOND2,FOND3,FOND4};
 	private LinkedList<Double> last3Delta = new LinkedList<>();
 
 	public static void main(String[] args) {
@@ -54,11 +62,17 @@ public class MainFish extends Application {
 		root = new Group();
 		Duration time;
 		System.out.println(Fish.FISHS);
-		KeyFrame ke = new KeyFrame(new Duration(1000), (e) -> {
-			plateau.iterator().forEachRemaining((c) -> changeImage(c));
-		});
-		Timeline timeline = new Timeline(ke);
-		timeline.setCycleCount(Timeline.INDEFINITE);
+		Label label = new Label("Voilà le début ...\nDrag souris pour bouger.\nCTRL drag souris pour zoomer.\nBref un jeux de dingue.\nCliquer moi dessus pour me jarter.");
+		label.setFont(new Font(20));
+		label.setBackground(new Background(new BackgroundFill(Color.WHITE,  new CornerRadii(10),new Insets(0))));
+		label.setLayoutX(14*60);
+		label.setLayoutY(14*60);
+		label.setOnMouseClicked((e)->root.getChildren().remove(label));
+//		KeyFrame ke = new KeyFrame(new Duration(1000), (e) -> {
+//			plateau.iterator().forEachRemaining((c) -> changeImage(c));
+//		});
+//		Timeline timeline = new Timeline(ke);
+//		timeline.setCycleCount(Timeline.INDEFINITE);
 		Scene scene = new Scene(root, Color.BLACK);
 		// root.prefHeight(500);
 		// root.prefWidth(500);
@@ -70,7 +84,7 @@ public class MainFish extends Application {
 
 				// p.setHeight(SIZE_CASE_X - MARGE);
 				// p.setWidth(SIZE_CASE_Y - MARGE);
-				Image c = getImage(i, j);
+				Image c = getRandomImage();
 				ImageView p = new ImageView(c);
 				p.setY(i * SIZE_CASE_X);
 				p.setX(j * SIZE_CASE_Y);
@@ -92,20 +106,22 @@ public class MainFish extends Application {
 		scene.setOnKeyReleased((k) -> keyReleased(k));
 		primaryStage.setScene(scene);
 		primaryStage.setFullScreen(true);
-
+		root.getChildren().add(label);
+		root.setTranslateX(-10*60);
+		root.setTranslateY(-10*60);
 		primaryStage.show();
-		timeline.play();
+//		timeline.play();
 
 	}
 
-	private void changeImage(Case<ImageView> c) {
-		int nextInt = random.nextInt(10);
-		if(nextInt == 0)
-			c.getObject().setImage(getImage(c.getX(), c.getY()));
+//	private void changeImage(Case<ImageView> c) {
+//		int nextInt = random.nextInt(10);
+//		if(nextInt == 0)
+//			c.getObject().setImage(getImage(c.getX(), c.getY()));
+//
+//	}
 
-	}
-
-	private Image getImage(int i, int j) {
+	private Image getFond(int i, int j) {
 		if (i == 0 || i == SIZE_X - 1 || j == 0 || j == SIZE_Y - 1) {
 			return FOND1;
 		}
@@ -144,6 +160,14 @@ public class MainFish extends Application {
 		}
 		return FOND3;
 
+	}
+	
+	private Image getRandomImage(){
+		
+		return images[random.nextInt(images.length)];
+	
+		
+		
 	}
 
 	private static Image getImage(String string, double i, double j) {

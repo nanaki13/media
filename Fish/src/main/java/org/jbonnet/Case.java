@@ -1,11 +1,10 @@
 package org.jbonnet;
 
-import javafx.scene.paint.Paint;
-
-public class Case<T> {
+public class Case<Model,View> {
 	
 	private int x;
 	private int y;
+	private View view;
 	
 	/**
 	 * @return the x
@@ -31,7 +30,7 @@ public class Case<T> {
 	public void setY(int y) {
 		this.y = y;
 	}
-	private T object;
+	private Model model;
 	/**
 	 * @param color
 	 * @param pane
@@ -42,15 +41,28 @@ public class Case<T> {
 	/**
 	 * @return the object
 	 */
-	public T getObject() {
-		return object;
+	public Model getModel() {
+		return model;
 	}
 	/**
 	 * @param object the object to set
 	 */
-	public void setObject(T object) {
-		this.object = object;
+	public void setModel(Model object) {
+		this.model = object;
 	}
+	/**
+	 * @return the view
+	 */
+	public View getView() {
+		return view;
+	}
+	/**
+	 * @param view the view to set
+	 */
+	public void setView(View view) {
+		this.view = view;
+	}
+	
 	
 	
 }

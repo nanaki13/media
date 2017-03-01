@@ -14,25 +14,13 @@ public class Fish {
 	private double proba;
 	private double cost;
 	
-	public static final List<Fish> FISHS;
-	static{
-		FISHS = new ArrayList<>();
-		try(BufferedReader bis = new BufferedReader(new InputStreamReader(Fish.class.getResourceAsStream("/fish")));){
-			String line = null;
-			while((line = bis.readLine()) != null){
-				String[] sp = line.split(" ");
-				Fish f = new Fish(sp[0],
-						Integer.parseInt(sp[1]),
-						Integer.parseInt( sp[2]),
-						Double.parseDouble(sp[3]),
-						Double.parseDouble(sp[4])
-						);
-				FISHS.add(f);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+	
+	/**
+	 * 
+	 */
+	public Fish() {
+		super();
 	}
 	/**
 	 * @param size

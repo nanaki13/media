@@ -64,4 +64,5 @@ public interface ObjectIOInterface {
 //		Object converted = Strings.convertTo(type,text);
 //		setTo(field, o, converted);
 	}
+	public String getClassName();
 }

@@ -113,4 +113,9 @@ class ReflectIOInterface implements ObjectIOInterface {
 		return getters.get(field).getReturnType();
 	}
 
+	@Override
+	public String getClassName() {
+		return clazz.getSimpleName();
+	}
+
 }

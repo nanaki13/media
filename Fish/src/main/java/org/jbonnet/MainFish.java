@@ -30,10 +30,8 @@ import javafx.util.Duration;
 
 public class MainFish extends Application {
 
-	private static final int SIZE_EAU_X = 28;
-	private static final int SIZE_EAU_Y = 28;
-	private static final int SIZE_X = SIZE_EAU_X + 2;
-	private static final int SIZE_Y = SIZE_EAU_Y + 2;
+
+	
 	private static final int SIZE_CASE_X = 60;
 	private static final int SIZE_CASE_Y = 60;
 	private static final int MARGE = 3;
@@ -50,7 +48,6 @@ public class MainFish extends Application {
 	}
 
 	private Random random = new Random();
-	private Plateau<Case<ImageView>> plateau;
 	private Double prviousY;
 	private Group root;
 	private boolean control;
@@ -58,6 +55,7 @@ public class MainFish extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		FishEngine fishEngine = new FishEngine();
 		plateau = new Plateau<>(SIZE_X, SIZE_Y, Case::new);
 		root = new Group();
 		Duration time;
@@ -88,8 +86,8 @@ public class MainFish extends Application {
 				ImageView p = new ImageView(c);
 				p.setY(i * SIZE_CASE_X);
 				p.setX(j * SIZE_CASE_Y);
-				Case<ImageView> case1 = plateau.getCase(i, j);
-				case1.setObject(p);
+				Case<CaseContent,ImageView> case1 = plateau.getCase(i, j);
+				case1.setView(p);
 				case1.setX(i);
 				case1.setY(j);
 
@@ -127,7 +125,7 @@ public class MainFish extends Application {
 		}
 		int nx = i - SIZE_X / 2;
 		int ny = j - SIZE_Y / 2;
-		double rMax = Math.sqrt(SIZE_EAU_X * SIZE_EAU_X / 4 + SIZE_EAU_Y * SIZE_EAU_Y / 4);
+		double rMax = Math.sqrt(FishEngine.SIZE_EAU_X * FishEngine.SIZE_EAU_X / 4 + SIZE_EAU_Y * SIZE_EAU_Y / 4);
 		double r = Math.sqrt(nx * nx + ny * ny);
 		// System.out.println("i : "+i);
 		// System.out.println("j : "+j);
@@ -257,7 +255,7 @@ public class MainFish extends Application {
 		}
 		int nx = i - SIZE_X / 2;
 		int ny = j - SIZE_Y / 2;
-		double rMax = Math.sqrt(SIZE_EAU_X * SIZE_EAU_X / 4 + SIZE_EAU_Y * SIZE_EAU_Y / 4);
+		double rMax = Math.sqrt(FishEngine.SIZE_EAU_X * FishEngine.SIZE_EAU_X / 4 + SIZE_EAU_Y * SIZE_EAU_Y / 4);
 		double r = Math.sqrt(nx * nx + ny * ny);
 		// System.out.println("i : "+i);
 		// System.out.println("j : "+j);

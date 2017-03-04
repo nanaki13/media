@@ -56,10 +56,9 @@ public class MainFish extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		FishEngine fishEngine = new FishEngine();
-		plateau = new Plateau<>(SIZE_X, SIZE_Y, Case::new);
+		
 		root = new Group();
 		Duration time;
-		System.out.println(Fish.FISHS);
 		Label label = new Label("Voilà le début ...\nDrag souris pour bouger.\nCTRL drag souris pour zoomer.\nBref un jeux de dingue.\nCliquer moi dessus pour me jarter.");
 		label.setFont(new Font(20));
 		label.setBackground(new Background(new BackgroundFill(Color.WHITE,  new CornerRadii(10),new Insets(0))));

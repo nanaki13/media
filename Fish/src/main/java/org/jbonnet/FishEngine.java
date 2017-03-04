@@ -1,10 +1,11 @@
 package org.jbonnet;
 
-import javafx.scene.image.ImageView;
+import org.jbonnet.Constants.Deep;
 
 public class FishEngine {
 
 	private Plateau<?> plateau;
+	private Plateau<Case<CaseContent,?> > plateau_;
 	private static final int SIZE_EAU_X = 28;
 	private static final int SIZE_EAU_Y = 28;
 	private int sizeXWater ;
@@ -22,10 +23,52 @@ public class FishEngine {
 		computeSizeXSizeY();
 		initPlateau();
 	}
-	
+
 	private void initPlateau() {
-		plateau = new Plateau<>(sizeX, sizeY, Case::new);
+		plateau_ = new Plateau<>(sizeX, sizeY, Case::new);
+		plateau = plateau_;
+		for (int i = 0; i < sizeX; i++) {
+			for (int j = 0; j < sizeY; j++) {
+
+				// Rectangle p = new Rectangle();
+
+				// p.setHeight(SIZE_CASE_X - MARGE);
+				// p.setWidth(SIZE_CASE_Y - MARGE);
+//				Image c = getRandomImage();
+//				ImageView p = new ImageView(c);
+//				p.setY(i * SIZE_CASE_X);
+//				p.setX(j * SIZE_CASE_Y);
+				
+				Case<CaseContent,?> case1 =  plateau_.getCase(i, j);
+//				case1.setView(p);
+				case1.setX(i);
+				case1.setY(j);
+				CaseContent caseContent = new CaseContent();
+				caseContent.setDeep(getDeep(i,j));
+				// p.setFill(c);
+//				root.getChildren().add(p);
+
+				// Case c = new Case();
+			}
+		}
 		
+	}
+
+	private Deep getDeep(int i, int j) {
+		if (i == 0 || i == sizeX - 1 || j == 0 || j == sizeY - 1) {
+			return Deep.DO;
+		}
+		int nx = i - sizeXWater / 2;
+		int ny = j - sizeYWater / 2;
+		double rMax = Math.sqrt(sizeXWater * sizeXWater / 4 + sizeYWater * sizeYWater / 4);
+		double r = Math.sqrt(nx * nx + ny * ny);
+		if (r > rMax * 0.66) {
+			return Deep.D1;
+		} else if (r > rMax * 0.33) {
+			return Deep.D2;
+		} else {
+			return Deep.D3;
+		}
 	}
 
 	private void computeSizeXSizeY() {

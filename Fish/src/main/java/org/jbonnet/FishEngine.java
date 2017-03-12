@@ -1,6 +1,7 @@
 package org.jbonnet;
 
 import org.jbonnet.Constants.Deep;
+import org.jbonnet.Constants.Orientation;
 
 public class FishEngine {
 
@@ -45,6 +46,9 @@ public class FishEngine {
 				case1.setY(j);
 				CaseContent caseContent = new CaseContent();
 				caseContent.setDeep(getDeep(i,j));
+				case1.setModel(caseContent);
+				
+				case1.setOrientation(getOrientation(i,j));
 				// p.setFill(c);
 //				root.getChildren().add(p);
 
@@ -54,17 +58,22 @@ public class FishEngine {
 		
 	}
 
+	private Orientation getOrientation(int i, int j) {
+		
+		return Orientation.getOrientation(i, j, sizeX, sizeY);
+	}
+
 	private Deep getDeep(int i, int j) {
 		if (i == 0 || i == sizeX - 1 || j == 0 || j == sizeY - 1) {
 			return Deep.DO;
 		}
-		int nx = i - sizeXWater / 2;
-		int ny = j - sizeYWater / 2;
+		int nx = i - sizeX / 2;
+		int ny = j - sizeX / 2;
 		double rMax = Math.sqrt(sizeXWater * sizeXWater / 4 + sizeYWater * sizeYWater / 4);
 		double r = Math.sqrt(nx * nx + ny * ny);
-		if (r > rMax * 0.66) {
+		if (r > rMax * 2 / 3) {
 			return Deep.D1;
-		} else if (r > rMax * 0.33) {
+		} else if (r > rMax * 1 / 3) {
 			return Deep.D2;
 		} else {
 			return Deep.D3;

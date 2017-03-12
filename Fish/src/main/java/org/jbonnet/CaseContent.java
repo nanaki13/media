@@ -3,6 +3,7 @@ package org.jbonnet;
 public class CaseContent {
 
 	private Constants.Deep deep;
+	
 	private Fish fish;
 	private Pecheur pecheur;
 	/**

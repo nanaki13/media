@@ -5,7 +5,22 @@ public class Case<Model,View> {
 	private int x;
 	private int y;
 	private View view;
+	private Constants.Orientation orientation;
 	
+	
+	
+	/**
+	 * @return the orientation
+	 */
+	public Constants.Orientation getOrientation() {
+		return orientation;
+	}
+	/**
+	 * @param orientation the orientation to set
+	 */
+	public void setOrientation(Constants.Orientation orientation) {
+		this.orientation = orientation;
+	}
 	/**
 	 * @return the x
 	 */

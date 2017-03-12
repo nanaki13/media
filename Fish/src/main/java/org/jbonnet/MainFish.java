@@ -5,10 +5,10 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.application.Application;
+import org.jbonnet.Constants.Deep;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -23,12 +23,12 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class MainFish extends Application {
+@SpringBootApplication
+public class MainFish extends AbstractJavaFxApplicationSupport {
 
 
 	
@@ -43,7 +43,8 @@ public class MainFish extends Application {
 	private LinkedList<Double> last3Delta = new LinkedList<>();
 
 	public static void main(String[] args) {
-		Application.launch(args);
+//		Application.launch(args);
+		launchApp(MainFish.class, args);
 
 	}
 
@@ -52,12 +53,20 @@ public class MainFish extends Application {
 	private Group root;
 	private boolean control;
 	private Double prviousX;
+	
+	@Autowired
+	FishEngine fishEngine;
+	private Group background;
+	private Group labels;
 
 	@Override
 	public void start(Stage primaryStage) {
-		FishEngine fishEngine = new FishEngine();
+		
 		
 		root = new Group();
+		background = new Group();
+		labels = new Group();
+		root.getChildren().addAll(background,labels);
 		Duration time;
 		Label label = new Label("Voilà le début ...\nDrag souris pour bouger.\nCTRL drag souris pour zoomer.\nBref un jeux de dingue.\nCliquer moi dessus pour me jarter.");
 		label.setFont(new Font(20));
@@ -74,24 +83,32 @@ public class MainFish extends Application {
 		// root.prefHeight(500);
 		// root.prefWidth(500);
 
-		for (int i = 0; i < SIZE_X; i++) {
-			for (int j = 0; j < SIZE_Y; j++) {
+		for (int i = 0; i < fishEngine.getSizeX(); i++) {
+			for (int j = 0; j < fishEngine.getSizeY(); j++) {
 
-				// Rectangle p = new Rectangle();
 
-				// p.setHeight(SIZE_CASE_X - MARGE);
-				// p.setWidth(SIZE_CASE_Y - MARGE);
-				Image c = getRandomImage();
+				
+				Plateau<Case<CaseContent, ImageView>> pl = fishEngine.getPlateau();
+				Case<CaseContent,ImageView> case1 =  pl.getCase(i, j);
+				
+				Image c = getRandomImage(case1.getModel().getDeep());
 				ImageView p = new ImageView(c);
 				p.setY(i * SIZE_CASE_X);
 				p.setX(j * SIZE_CASE_Y);
-				Case<CaseContent,ImageView> case1 = plateau.getCase(i, j);
 				case1.setView(p);
 				case1.setX(i);
 				case1.setY(j);
-
+				System.out.println( case1.getOrientation());
+				Label labelOr = new Label(String.valueOf( case1.getOrientation()));
+				labelOr.setFont(new Font(9));
+				labelOr.setBackground(new Background(new BackgroundFill(Color.WHITE,  new CornerRadii(10),new Insets(0))));
+				labelOr.setLayoutX(i * SIZE_CASE_X);
+				labelOr.setLayoutY(j * SIZE_CASE_Y);
+//				labelOr.setDis
 				// p.setFill(c);
-				root.getChildren().add(p);
+				background.getChildren().add(p);
+				labels.getChildren().add(labelOr);
+//				root.getChildren().addAll(labelOr);
 
 				// Case c = new Case();
 			}
@@ -111,57 +128,11 @@ public class MainFish extends Application {
 
 	}
 
-//	private void changeImage(Case<ImageView> c) {
-//		int nextInt = random.nextInt(10);
-//		if(nextInt == 0)
-//			c.getObject().setImage(getImage(c.getX(), c.getY()));
-//
-//	}
 
-	private Image getFond(int i, int j) {
-		if (i == 0 || i == SIZE_X - 1 || j == 0 || j == SIZE_Y - 1) {
-			return FOND1;
-		}
-		int nx = i - SIZE_X / 2;
-		int ny = j - SIZE_Y / 2;
-		double rMax = Math.sqrt(FishEngine.SIZE_EAU_X * FishEngine.SIZE_EAU_X / 4 + SIZE_EAU_Y * SIZE_EAU_Y / 4);
-		double r = Math.sqrt(nx * nx + ny * ny);
-		// System.out.println("i : "+i);
-		// System.out.println("j : "+j);
-		// System.out.println(rMax);
-		// System.out.println(r );
-		double p3;
-		double p2;
-		double p1;
-		if (r > rMax * 0.66) {
-			p1 = 8d / 10d;
-			p2 = 2d / 10d;
-			p3 = 0;
-		} else if (r > rMax * 0.33) {
-			p1 = 1d / 10d;
-			p2 = 8d / 10d;
-			p3 = 1d / 10d;
-		} else {
-			p1 = 0d / 10d;
-			p2 = 2d / 10d;
-			p3 = 8d / 10d;
-		}
-		double random2 = Math.random();
-		// System.out.println("p1 : "+p1);
-		// System.out.println("p2 : "+p2);
-		// System.out.println("p3 : "+p3);
-		if (random2 < p1) {
-			return FOND1;
-		} else if (random2 < p1 + p2) {
-			return FOND2;
-		}
-		return FOND3;
-
-	}
 	
-	private Image getRandomImage(){
+	private Image getRandomImage(Deep deep){
 		
-		return images[random.nextInt(images.length)];
+		return images[deep.ordinal()];
 	
 		
 		
@@ -248,45 +219,5 @@ public class MainFish extends Application {
 
 	}
 
-	private Paint getColor(int i, int j) {
-		if (i == 0 || i == SIZE_X - 1 || j == 0 || j == SIZE_Y - 1) {
-			return Color.BROWN;
-		}
-		int nx = i - SIZE_X / 2;
-		int ny = j - SIZE_Y / 2;
-		double rMax = Math.sqrt(FishEngine.SIZE_EAU_X * FishEngine.SIZE_EAU_X / 4 + SIZE_EAU_Y * SIZE_EAU_Y / 4);
-		double r = Math.sqrt(nx * nx + ny * ny);
-		// System.out.println("i : "+i);
-		// System.out.println("j : "+j);
-		// System.out.println(rMax);
-		// System.out.println(r );
-		double p3;
-		double p2;
-		double p1;
-		if (r > rMax * 0.66) {
-			p1 = 8d / 10d;
-			p2 = 2d / 10d;
-			p3 = 0;
-		} else if (r > rMax * 0.33) {
-			p1 = 1d / 10d;
-			p2 = 8d / 10d;
-			p3 = 1d / 10d;
-		} else {
-			p1 = 0d / 10d;
-			p2 = 2d / 10d;
-			p3 = 8d / 10d;
-		}
-		double random2 = Math.random();
-		// System.out.println("p1 : "+p1);
-		// System.out.println("p2 : "+p2);
-		// System.out.println("p3 : "+p3);
-		if (random2 < p1) {
-			return Color.AQUA;
-		} else if (random2 < p1 + p2) {
-			return Color.AQUAMARINE;
-		}
-		return Color.MEDIUMAQUAMARINE;
-
-	}
-
+	
 }

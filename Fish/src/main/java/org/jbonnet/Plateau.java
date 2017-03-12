@@ -14,6 +14,20 @@ public class Plateau<T> implements Iterable<T> {
 		this(sizeX,sizeY,()->null);
 	}
 	
+	/**
+	 * @return the sizeY
+	 */
+	public int getSizeY() {
+		return sizeY;
+	}
+
+	/**
+	 * @return the sizeX
+	 */
+	public int getSizeX() {
+		return sizeX;
+	}
+
 	public Plateau(int x , int y,Supplier<T> newT){
 		this.sizeX = x;
 		this.sizeY = y;

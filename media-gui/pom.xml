@@ -11,6 +11,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.1.RELEASE</version>
 	</parent>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.nanaki</groupId>
@@ -23,6 +24,7 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	
 	<build>
 		<plugins>
 			<plugin>

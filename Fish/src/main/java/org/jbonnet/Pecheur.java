@@ -1,6 +1,8 @@
 package org.jbonnet;
 
 public class Pecheur {
+	private int id;
+	private String name;
 	private int speed;
 	private int strenght;
 	private int endurance;
@@ -20,6 +22,24 @@ public class Pecheur {
 		this.endurance = endurance;
 		this.luck = luck;
 	}
+	
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 	/**
 	 * @return the speed
 	 */
@@ -68,6 +88,24 @@ public class Pecheur {
 	public void setLuck(int luck) {
 		this.luck = luck;
 	}
+
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 	
 	
 }

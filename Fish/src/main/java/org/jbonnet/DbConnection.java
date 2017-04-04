@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.jbonnet.orm.Filler;
+import org.jbonnet.orm.SqlLiteTypeMapping;
+import org.jbonnet.orm.TypeMapping;
 import org.jbonnet.stream.StreamUtils;
 
 public class DbConnection {
@@ -35,6 +37,12 @@ public class DbConnection {
 	public static void main(String[] args) throws IOException, SQLException {
 		DbConnection dbConnection = new DbConnection();
 		System.out.println(dbConnection.getAllFish());
+		System.out.println(dbConnection.filler.entityTableExists(Fish.class));
+		System.out.println(dbConnection.filler.entityTableExists(Pecheur.class));
+		if(!dbConnection.filler.entityTableExists(Pecheur.class)){
+			dbConnection.filler.createEntityTable(Pecheur.class, new SqlLiteTypeMapping(),"id");
+		}
+		
 
 	}
 	

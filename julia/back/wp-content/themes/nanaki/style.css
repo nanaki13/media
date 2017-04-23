@@ -1,0 +1,499 @@
+/*
+Theme Name: 1870wp
+Description: Theme demo for the tutorial to create your own theme on http://www.wp-pluginsck.com
+Theme URI: http://www.wp-pluginsck.com
+Author: Cédric KEIFLIN - ced1870
+Author URI: http://www.wp-pluginsck.com
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+*/
+html {
+	height: 101%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	padding: 3px 0;
+	margin: 0;
+	line-height: 1.2;
+	font-weight: bold;
+	font-style: normal;
+}
+h1 {
+	font-size: 1.75em;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+h3 {
+	font-size: 1.25em;
+}
+
+h4 {
+	font-size: 1em;
+}
+
+ul, ol {
+	padding: .75em 0 .75em 0;
+	margin: 0 0 0 35px;
+}
+
+p {
+	padding: 5px 0;
+}
+
+address {
+	margin: .75em 0;
+	font-style: normal;
+}
+
+a:focus {
+	outline: none;
+}
+
+img {
+	border: none;
+	max-width: 100%;
+	height: auto;
+}
+
+em {
+	font-style: italic;
+}
+strong {
+	font-weight: bold;
+}
+
+form, fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+input, button, select {
+	vertical-align: middle;
+}
+
+.clr {
+	clear : both;
+}
+
+.clearfix:after {
+	content: " ";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+	font-size: 0;
+}
+
+.clearfix {
+	zoom: 1;
+}
+
+/* Styles généraux */
+
+body {
+	background: #f3f3f3;
+	color: #2b2b2b;
+	text-align: left;
+	line-height: 20px;
+	font-size: 12px;
+	font-family: Segoe UI, sans-serif;
+}
+
+a, a:visited {
+	color: #036c9e;
+}
+
+a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+h1 {
+	color: #036c9e;
+	text-align: left;
+	letter-spacing: -1px;
+	line-height: 25px;
+	font-size: 22px;
+}
+
+h2 {
+	color: #036c9e;
+	text-align: left;
+	font-size: 20px;
+}
+
+h2 a {
+	text-decoration: none;
+}
+
+h2 a:hover {
+	color: #036c9e;
+}
+
+
+/* largeur du theme */
+
+.container {
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+/* menu horizontal */
+
+#topmenu {
+    margin: 0;
+    padding: 0;
+    min-height: 50px;
+	background: #ffffff;
+	background-image: -o-linear-gradient(center top,#ffffff,#ffffff 40%, #e1e1e1 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#ffffff),color-stop(40%,#ffffff), color-stop(100%, #e1e1e1));
+	background-image: -moz-linear-gradient(center top,#ffffff,#ffffff 40%, #e1e1e1 100%);
+	background-image: linear-gradient(center top,#ffffff,#ffffff 40%, #e1e1e1 100%);
+	border: #ffffff 1px solid;
+    box-shadow: #545454 0px 1px 1px 0px;
+    -moz-box-shadow: #545454 0px 1px 1px 0px;
+    -webkit-box-shadow: #545454 0px 1px 1px 0px;
+}
+
+#topmenu ul.menu {
+    margin: 0;
+    padding: 0;
+	zoom: 1;
+}
+
+#topmenu ul.menu:after {
+    content : "";
+    clear: both;
+    display: block;
+}
+
+#topmenu ul.menu > li {
+	margin: 0;
+	padding: 0;
+	list-style:none;
+     border-right: 1px solid #fff;
+     box-shadow: 1px 0 0 #e1e1e1;
+	float: left;
+}
+
+#topmenu ul.menu > li > a, #topmenu ul.menu > li > span.separator {
+     display:block;
+	color: #036c9e;
+	margin: 0px;
+	padding: 15px;
+	padding-right: 20px;
+	padding-left: 20px;
+	text-align: center;
+	font-size: 14px;
+     text-decoration: none;
+}
+
+#topmenu ul.menu > li:hover > a, #topmenu ul.menu > li:hover > span.separator,
+#topmenu ul.menu > li.active > a, #topmenu ul.menu > li.active > span.separator {
+	background: #036c9e;
+	background-image: -o-linear-gradient(center top,#036c9e, #024e73 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#036c9e), color-stop(100%, #024e73));
+	background-image: -moz-linear-gradient(center top,#036c9e, #024e73 100%);
+	background-image: linear-gradient(center top,#036c9e, #024e73 100%);
+}
+
+#topmenu ul.menu > li:hover > a,
+#topmenu ul.menu > li.active > a {
+    color: #fff;
+}
+
+#topmenu ul.menu li li a, #topmenu ul.menu li li span.separator {
+    display:block;
+	margin: 10px;
+	padding: 5px;
+	padding-right: 10px;
+	padding-left: 10px;
+    text-decoration: none;
+}
+
+#topmenu ul.menu li li:hover > a {
+	background: #036c9e;
+	background-image: -o-linear-gradient(center top,#036c9e, #024e73 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#036c9e), color-stop(100%, #024e73));
+	background-image: -moz-linear-gradient(center top,#036c9e, #024e73 100%);
+	background-image: linear-gradient(center top,#036c9e, #024e73 100%);
+    color: #fff;
+}
+
+#topmenu ul.menu li li.active > a {
+	text-align: left;
+    color: #000;
+}
+
+#topmenu ul.menu li ul, #topmenu ul.menu li:hover ul ul, #topmenu ul.menu li:hover ul ul ul {
+	position: absolute;
+	left: -999em;
+	z-index: 999;
+    margin: 0;
+    padding: 0;
+	background: #ffffff;
+	background-image: -o-linear-gradient(center top,#ffffff,#ffffff 40%, #e1e1e1 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom,from(#ffffff),color-stop(40%,#ffffff), color-stop(100%, #e1e1e1));
+	background-image: -moz-linear-gradient(center top,#ffffff,#ffffff 40%, #e1e1e1 100%);
+	background-image: linear-gradient(center top,#ffffff,#ffffff 40%, #e1e1e1 100%);
+	border: #ffffff 1px solid;
+    box-shadow: #545454 0px 1px 1px 0px;
+    -moz-box-shadow: #545454 0px 1px 1px 0px;
+    -webkit-box-shadow: #545454 0px 1px 1px 0px;
+	width: 180px;
+}
+
+
+#topmenu ul.menu li:hover ul ul, #topmenu ul.menu li:hover li:hover ul ul, #topmenu ul.menu li:hover li:hover li:hover ul ul {
+	left: -999em;
+}
+
+#topmenu ul.menu li:hover > ul, #topmenu ul.menu li:hover ul li:hover > ul, #topmenu ul.menu li:hover ul li:hover ul li:hover > ul, #topmenu ul.menu li:hover ul li:hover ul li:hover ul li:hover > ul {
+	left: auto;
+}
+
+#topmenu ul.menu li:hover ul li:hover ul {
+	margin-top: -45px;
+	margin-left: 170px;
+}
+
+#topmenu ul.menu li li {
+    float: none;
+	list-style:none;
+}
+
+/* banniere logo + widget */
+#logo {
+    float: left;
+    margin: 5px 0;
+    display: block;
+    max-width: 100%;
+}
+
+#headerwidget {
+    float: right;
+    margin: 10px 0;
+}
+
+/* rangee de widget en haut */
+
+#top > .inner > div {
+	float: left;
+}
+
+#top > .inner > div > div.inner {
+	background: #ffffff;
+	box-shadow: #545454 0px 1px 1px 0px;
+	-moz-box-shadow: #545454 0px 1px 1px 0px;
+	-webkit-box-shadow: #545454 0px 1px 1px 0px;
+	padding: 10px;
+	margin: 5px 0 5px 10px;
+}
+
+#top > .inner > div:first-child  > div.inner {
+	margin-left: 0px;
+}
+
+/* titre de widget */
+#top h3 {
+	font-weight: normal;
+	font-size: 22px;
+	padding: 10px 0;
+}
+
+/* 1 widget */
+#top > .inner.n1 > div {
+    width: 100%;
+}
+
+/* 2 widgets, premier widget */
+#top > .inner.n2 > div {
+    width: 44.45%;
+}
+
+/* 2 widgets, deuxieme widget */
+#top > .inner.n2 > div + div {
+    width: 55.55%;
+}
+
+/* 3 widgets, premier widget */
+#top > .inner.n3 > div {
+    width: 32.7%;
+}
+
+/* 3 widgets, deuxieme widget */
+#top > .inner.n3 > div + div {
+    width: 33.6%;
+}
+
+/* 3 widgets, troisieme widget */
+#top > .inner.n3 > div + div + div {
+    width: 33.6%;
+}
+
+/* 4 widgets, premier widget */
+#top > .inner.n4 > div {
+    width: 24.25%;
+}
+
+/* 4 widgets, deuxieme widget */
+#top > .inner.n4 > div + div {
+    width: 25.25%;
+}
+
+/* 4 widgets, troisieme widget */
+#top > .inner.n4 > div + div + div {
+    width: 25.25%;
+}
+
+/* 4 widgets, quatrieme widget */
+#top > .inner.n4 > div + div + div + div {
+    width: 25.25%;
+}
+
+/* Gestion des colonnes */
+#main {
+	margin-bottom: 20px;
+}
+
+#left, #right, #center {
+	float: left;
+}
+
+#left {
+	width: 25%;
+}
+
+#right {
+	width: 20%;
+}
+
+#center {
+	width: 55%;
+}
+
+.noleft #center {
+	width: 80%;
+}
+
+.noright #center {
+	width: 75%;
+}
+
+.noright.noleft #center {
+	width: 100%;
+}
+
+#left > div.inner {
+	margin-right: 10px;
+}
+
+#right > div.inner {
+	margin-left: 10px;
+}
+
+#left > div.inner, #right > div.inner, #center > div.inner {
+	background: #ffffff;
+	box-shadow: #545454 0px 1px 1px 0px;
+	-moz-box-shadow: #545454 0px 1px 1px 0px;
+	-webkit-box-shadow: #545454 0px 1px 1px 0px;
+	padding: 15px;
+}
+
+/* pour menu vertical */
+#left ul.menu,
+#right ul.menu {
+	margin: 0;
+	padding: 0;
+}
+
+#left ul.menu li,
+#right ul.menu li {
+	list-style: none;
+}
+
+#left ul.menu li a,
+#right ul.menu li a {
+	display: block;
+	background:  url(images/tick.png) left center no-repeat;
+	border-bottom: 1px solid #e3e3e3;
+	box-shadow: 0 1px 0 #fff;
+	padding-top: 5px;
+	padding-bottom: 7px;
+	padding-left: 20px;
+	text-decoration: none;
+}
+
+/* titre d'article */
+h2.entry-title {
+	padding-left: 15px;
+	margin: 15px;
+}
+
+/* lien lire la suite */
+a.more-link{
+	text-decoration: none;
+	background: #efefef;
+	border: 1px solid #c3c3c3;
+	padding: 4px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	cursor: pointer;
+	margin: 7px;
+	display:inline-block;
+	line-height: 12px;
+}
+
+/* pied de page */
+#footerwrap {
+	background: #444;
+	padding: 20px;
+	border-top: 1px solid #000;
+}
+
+#footer {
+	color: #888;
+	text-align: center;
+}
+
+#footer a {
+	color: #fff;
+}
+
+/* Responsive design */
+@media screen and (max-width: 758px) {
+
+#topmenu ul.menu > li {
+	float: none;
+}
+
+#sidebartop1, #sidebartop2, #sidebartop3, #sidebartop4, #left, #center, #right {
+	float: none !important;
+	width: 100% !important;
+}
+
+#sidebartop1 > div.inner, #sidebartop2 > div.inner, #sidebartop3 > div.inner, #sidebartop4 > div.inner, #left > div.inner, #center > div.inner, #right > div.inner {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
+}
+
+

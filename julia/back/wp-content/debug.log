@@ -1,0 +1,91 @@
+[08-Jan-2017 08:16:02 UTC] PHP Notice:  Undefined index: image in /var/www/julia/wp-content/plugins/image-widget/image-widget.php on line 382
+[08-Jan-2017 08:16:09 UTC] PHP Notice:  Undefined index: image in /var/www/julia/wp-content/plugins/image-widget/image-widget.php on line 382
+[08-Jan-2017 08:17:08 UTC] PHP Notice:  Undefined index: image in /var/www/julia/wp-content/plugins/image-widget/image-widget.php on line 382
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: im_description1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: titleimage1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: order_by_1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: sl_link_target1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: sl_url1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: im_description2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: titleimage2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: order_by_2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: sl_link_target2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: sl_url2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: im_description1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: titleimage1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: order_by_1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: sl_link_target1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:21 UTC] PHP Notice:  Undefined index: sl_url1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: im_description3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: titleimage3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: order_by_3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_link_target3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_url3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: im_description2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: titleimage2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: order_by_2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_link_target2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_url2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: im_description1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: titleimage1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: order_by_1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_link_target1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_url1 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: im_description3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: titleimage3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: im_description2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: titleimage2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: order_by_2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_link_target2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_url2 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: order_by_3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_link_target3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_url3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: im_description3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 506
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: titleimage3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 507
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: order_by_3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 515
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_link_target3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 516
+[08-Jan-2017 08:25:22 UTC] PHP Notice:  Undefined index: sl_url3 in /var/www/julia/wp-content/plugins/slider-image/sliders.php on line 517
+[08-Jan-2017 08:28:43 UTC] PHP Notice:  Undefined index: hugeit_slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 772
+[08-Jan-2017 08:37:18 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 08:37:43 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 08:39:37 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 08:44:43 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 08:48:49 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 08:50:19 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 08:55:21 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:09:28 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:13:07 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:14:11 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:15:52 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:32:10 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:39:33 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:40:57 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:44:28 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:49:17 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 09:58:33 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[08-Jan-2017 10:06:52 UTC] PHP Notice:  Undefined index: slider_id in /var/www/julia/wp-content/plugins/slider-image/slider.php on line 946
+[16-Jan-2017 19:52:30 UTC] Erreur de la base de données WordPress Table 'site.wp_users' doesn't exist pour la requête SELECT * FROM wp_users WHERE user_login = 'jonathan' faite par require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), WP->init, wp_get_current_user, _wp_get_current_user, apply_filters('determine_current_user'), WP_Hook->apply_filters, call_user_func_array, wp_validate_auth_cookie, get_user_by, WP_User::get_data_by
+[16-Jan-2017 19:52:30 UTC] Erreur de la base de données WordPress Table 'site.wp_users' doesn't exist pour la requête SELECT * FROM wp_users WHERE user_login = 'jonathan' faite par require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), WP->init, wp_get_current_user, _wp_get_current_user, apply_filters('determine_current_user'), WP_Hook->apply_filters, call_user_func_array, wp_validate_logged_in_cookie, wp_validate_auth_cookie, get_user_by, WP_User::get_data_by
+[16-Jan-2017 19:52:30 UTC] Erreur de la base de données WordPress Table 'site.wp_options' doesn't exist pour la requête INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('nonce_key', 'jUWuE+Wdzz>Bk;G 4W[Q$RKk-w`^[edT:J9BLW)22CnU.x1>t[(Wm`3Yy-Jvn1H#', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`) faite par wp_print_scripts, wp_scripts, WP_Scripts->__construct, WP_Scripts->init, do_action_ref_array, WP_Hook->do_action, WP_Hook->apply_filters, call_user_func_array, wp_default_scripts, wp_create_nonce, wp_hash, wp_salt, update_site_option, update_network_option, add_network_option, add_option
+[16-Jan-2017 19:52:30 UTC] Erreur de la base de données WordPress Table 'site.wp_options' doesn't exist pour la requête INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('nonce_salt', 'F9Dz~g^1n@p%,eT)L(}-Oz;fBU1hT9MYQ[9u =F_%SrFk8tfv;tD4v(3PpPP!7bd', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`) faite par wp_print_scripts, wp_scripts, WP_Scripts->__construct, WP_Scripts->init, do_action_ref_array, WP_Hook->do_action, WP_Hook->apply_filters, call_user_func_array, wp_default_scripts, wp_create_nonce, wp_hash, wp_salt, update_site_option, update_network_option, add_network_option, add_option
+[16-Jan-2017 19:53:08 UTC] Erreur de la base de données WordPress Table 'site.wp_users' doesn't exist pour la requête SELECT * FROM wp_users WHERE user_login = 'jonathan' faite par require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), WP->init, wp_get_current_user, _wp_get_current_user, apply_filters('determine_current_user'), WP_Hook->apply_filters, call_user_func_array, wp_validate_auth_cookie, get_user_by, WP_User::get_data_by
+[16-Jan-2017 19:53:08 UTC] Erreur de la base de données WordPress Table 'site.wp_users' doesn't exist pour la requête SELECT * FROM wp_users WHERE user_login = 'jonathan' faite par require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), WP->init, wp_get_current_user, _wp_get_current_user, apply_filters('determine_current_user'), WP_Hook->apply_filters, call_user_func_array, wp_validate_logged_in_cookie, wp_validate_auth_cookie, get_user_by, WP_User::get_data_by
+[22-Jan-2017 12:21:31 UTC] PHP Warning:  scandir(/var/www/julia/wp-content/themes/nanaki/images): failed to open dir: Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:31 UTC] PHP Warning:  scandir(): (errno 13): Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:31 UTC] PHP Warning:  Invalid argument supplied for foreach() in /var/www/julia/wp-includes/class-wp-theme.php on line 1141
+[22-Jan-2017 12:21:31 UTC] PHP Warning:  scandir(/var/www/julia/wp-content/themes/nanaki/js): failed to open dir: Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:31 UTC] PHP Warning:  scandir(): (errno 13): Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:31 UTC] PHP Warning:  Invalid argument supplied for foreach() in /var/www/julia/wp-includes/class-wp-theme.php on line 1141
+[22-Jan-2017 12:21:42 UTC] PHP Warning:  scandir(/var/www/julia/wp-content/themes/nanaki/images): failed to open dir: Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:42 UTC] PHP Warning:  scandir(): (errno 13): Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:42 UTC] PHP Warning:  Invalid argument supplied for foreach() in /var/www/julia/wp-includes/class-wp-theme.php on line 1141
+[22-Jan-2017 12:21:42 UTC] PHP Warning:  scandir(/var/www/julia/wp-content/themes/nanaki/js): failed to open dir: Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:42 UTC] PHP Warning:  scandir(): (errno 13): Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:21:42 UTC] PHP Warning:  Invalid argument supplied for foreach() in /var/www/julia/wp-includes/class-wp-theme.php on line 1141
+[22-Jan-2017 12:23:15 UTC] PHP Warning:  scandir(/var/www/julia/wp-content/themes/nanaki/js): failed to open dir: Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:23:15 UTC] PHP Warning:  scandir(): (errno 13): Permission denied in /var/www/julia/wp-includes/class-wp-theme.php on line 1138
+[22-Jan-2017 12:23:15 UTC] PHP Warning:  Invalid argument supplied for foreach() in /var/www/julia/wp-includes/class-wp-theme.php on line 1141
+[28-Jan-2017 14:17:01 UTC] PHP Notice:  Trying to get property of non-object in /var/www/julia/wp-includes/nav-menu.php on line 727
+[28-Jan-2017 14:17:01 UTC] PHP Notice:  Trying to get property of non-object in /var/www/julia/wp-includes/nav-menu.php on line 727
+[28-Jan-2017 14:17:01 UTC] PHP Notice:  Trying to get property of non-object in /var/www/julia/wp-includes/nav-menu.php on line 731

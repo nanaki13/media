@@ -1,0 +1,165 @@
+
+
+.bandeau{
+  
+  /*position: absolute;*/
+    top: 0;
+    left: 0;
+    
+}
+}
+.gallery_cont{
+	display: block;
+	width: 100%;	
+	padding: 0; 
+	margin: 0;
+	
+}
+.gallery_right_cont{
+	
+	display: inline-block;
+	width: 20%;	
+	/*right:3%;*/
+	vertical-align:top;
+	right:0;
+
+	
+}
+.gallery{
+	display: inline-block;
+	/*width: 30%;*/
+	
+
+}	
+.gallery_image{
+	height: 40px;
+	/*width: 40px;*/
+	
+
+}
+.current_image{
+	
+	height:500px;
+	padding:0 3% 0 3%;
+	margin-left:15%;	
+	-webkit-transition: width 2s; /* Safari */
+	transition: width 2s, height 2s;
+	
+
+}
+/*.current_image:hover{
+	
+	width: 100%;
+	text-align:center;
+
+}*/
+.current_image{
+	
+/* 	width: 50%; */
+/* 	height:500px; */
+/* 	text-align:center; */
+
+}
+.legend_image{
+	font-size:1em;
+	display: inline-block;
+	width: 30%;
+
+}
+.current_image_div{
+	
+	display: inline-block;
+	width: 70%;
+	
+	
+
+}
+.menu{
+	padding: 2% 0 2% 0;
+	margin: 2% 0 2% 0;
+	text-align: center; 
+	background-image:url("/rsc/bandeau.jpg");
+	background-repeat:no-repeat;
+	background-position : center;
+	background-size: 100%;
+
+}
+.subMenuDiv{
+	display: inline;
+	font-size: 1.5em ;
+	padding: 1%; margin: 2%;
+	color:white;
+	text-decoration:none;
+
+
+
+}
+
+.subMenuDiv img{
+    position:background;
+	width: 20%;
+
+
+
+}
+
+.menu_item{
+	display: inline;
+	font-size: 1.5em ;
+	padding: 1%; margin: 2%;
+	color:white;
+	text-decoration:none;
+
+
+
+}
+.menu_item_div{
+	display: inline;
+}
+.menu_item:hover{
+	color:gold;
+}
+.title 	{
+	  
+	 font-size: 2em ;
+	  font-family: eb garamond,serif;
+	  text-align: center;
+	 
+	
+	 
+}
+.title_sub{
+  margin-top:0.75em;
+  font-size: 0.75em ;
+  
+}
+body{
+	background-color:white;
+	padding: 0; 
+	margin: 0;
+}
+.root {
+	
+    font: 1em 'Open Sans',sans-serif;
+	color:black;
+	/*width : 100%;*/
+	background-color:transparent;
+	padding: 0; 
+	margin: 0;
+}
+.image_back {
+  	
+	width : 25.32%;
+	margin:0.3%;
+	padding:0%;
+	vertical-align:top; 
+}
+.div_back {
+  	/*z-index: -1;
+	width : 100%;
+	 
+	position : absolute;*/
+	text-align: center;
+	margin-top : 3em;
+	/*left:0;*/
+}

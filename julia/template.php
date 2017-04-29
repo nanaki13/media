@@ -10,7 +10,7 @@
 
 </head>
 <body>
-<div class="root">
+<div id="root" class="root">
 <?php  $page->echoBody() ?>
 </div>
 <?php echo $page->echoJs() ?>

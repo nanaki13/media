@@ -7,46 +7,136 @@
     left: 0;
     
 }
-}
-.gallery_cont{
-	display: block;
+.gallery_inner_cont{
+	
+	
 	width: 100%;	
-	padding: 0; 
-	margin: 0;
+	/*right:3%;*/
+	
+	text-align:center;
+	margin:auto;
+	
+
 	
 }
-.gallery_right_cont{
 	
-	display: inline-block;
-	width: 20%;	
+.gallery_cont{
+	
+	
+	width: 100%;	
 	/*right:3%;*/
-	vertical-align:top;
-	right:0;
+	
+	
+	
+	
 
 	
 }
 .gallery{
+	position:relative;
 	display: inline-block;
 	/*width: 30%;*/
+	overflow: hidden;
+	 vertical-align: middle;
+	 margin: 1em;
+	
+	
 	
 
 }	
 .gallery_image{
-	height: 40px;
+	display: block;
+  width: auto;
+  height: auto;
+  max-width: 300px;
+  max-height: 300px;
+  margin:  auto;
+ 
+/* 	height: 250px; */
+/* 	width: 250px; */
+	
+/* 	transform: scale(1.5,1.5); */
+	
+	
 	/*width: 40px;*/
 	
 
 }
-.current_image{
-	
-	height:500px;
-	padding:0 3% 0 3%;
-	margin-left:15%;	
-	-webkit-transition: width 2s; /* Safari */
-	transition: width 2s, height 2s;
-	
-
+#root_slider{
+	display: none;
 }
+#background_slider{
+	top: 0px;
+	position: absolute;	
+	
+	background-color: black;	
+	width:100%;
+	
+	display:block;
+/* 	opacity:0.5; */
+}
+#btnRight{
+	top: 50%;
+	right:0;
+	position: absolute;	
+	
+	background-color: gold;	
+	width:5%;
+	height:5%;
+	display:block;
+	
+}
+#btnLeft{
+	top: 50%;
+	left:0;
+	position: absolute;	
+	
+	background-color: gold;	
+	width:5%;
+	height:5%;
+	display:block;
+	
+}
+.slider {
+	position: absolute;	
+	top: 5%;
+	left: 0px;
+	width:100%;
+	
+	
+}
+#current_image_div{
+	
+	width:90%;
+	margin: auto;
+	text-align:center;
+	
+}
+#current_image{
+	position: relative;	
+	width: auto;
+	max-height:600px;
+}
+.topright {
+	display:none;
+    position: absolute;
+    top: 0px;
+/*     right: 16px; */
+    font-size: 18px;
+    text-align:left;
+    color: gold;
+}
+.gallery_image:HOVER + .topright {
+	display:block;
+   
+}
+
+.topright:HOVER {
+	display:block;
+   
+}
+
+
 /*.current_image:hover{
 	
 	width: 100%;
@@ -66,14 +156,7 @@
 	width: 30%;
 
 }
-.current_image_div{
-	
-	display: inline-block;
-	width: 70%;
-	
-	
 
-}
 .menu{
 	padding: 2% 0 2% 0;
 	margin: 2% 0 2% 0;

@@ -103,6 +103,7 @@ class Page
 	if( isset($this->gallery)){
 		$local = $this->gallery;
 		require('gallery.php');	
+		require('slider.php');
 	}
 	
 	

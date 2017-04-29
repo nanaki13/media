@@ -8,12 +8,12 @@ class Config{
   private $page;
   private $parent;
   public function __construct($page,$subPage){
-	     
+	    
 	    if(isset( $subPage)){
 	      $this->parent = $page;
 	      $this->page = $subPage;
 	    }else{
-		 $this->page = $page;
+			$this->page = $page;
 	    }
 	    
 	    $db = new SQLite3("julia.db",SQLITE3_OPEN_READWRITE);
@@ -40,14 +40,15 @@ class Config{
 			"titleSection" => array ("title" => $res['title'], "subTitle" => $res['subTitle'])
 		);
 		if( $this->page != "accueil" && !isset($this->parent)){
-		    $result2 = $db->query("select technique.code tech_code,image.name image_name,theme.name theme_name from technique 
+		    $result2 = $db->query("select technique.code tech_code,image.name image_name,theme.name theme_name, image_path.path image_path from technique 
 		      join technique_theme on technique.code = technique_theme.tech_code 
-		      join image on image.id = image_key
-		      join theme on theme.id = technique_theme.theme_key where technique.name = '". $this->page."'");
+		      join image on image.id = technique_theme.image_key
+		      join image_path on image.id = image_path.image_key and width = '1200'
+		    join theme on theme.id = technique_theme.theme_key where technique.name = '". $this->page."'");
 		      $this->config['subMenuItems']= array();
 		    while($res = $result2->fetchArray(SQLITE3_ASSOC)){ 
 
-		      $this->config['subMenuItems'][]=array("ref"=>str_replace(" ","-", $res['theme_name']),"name"=>$res['theme_name'],"img"=>replaceSpace($res['image_name']));
+		      $this->config['subMenuItems'][]=array("ref"=>str_replace(" ","-", $res['theme_name']),"name"=>$res['theme_name'],"img"=>$res['image_path']);
 		      
 		    }
 		    $result2->finalize();
@@ -60,20 +61,20 @@ class Config{
 		where theme.name='".$this->page."'";
 		$this->config['gallery']= array();
 		$result2 = $db->query($sql);
-		     
+		    
 
 		while($res = $result2->fetchArray(SQLITE3_ASSOC)){ 
-		   
+		  
 		      $imageGallery  = new ImageGallery();
 		      
 		      c($imageGallery,$res);
 		      $this->config['gallery'][]=$imageGallery;
-		      $this->config['javascript'] ;
+		      
 		      
 		    }
 		}
 		$this->config['menuItems']  = array(array("ref" => "/accueil", "name" => "Acceuil" ));
-		  $result2 = $db->query("select * from technique ");
+$result2 = $db->query("select * from technique ");
 		while($res = $result2->fetchArray(SQLITE3_ASSOC)){ 
 		    $this->config['menuItems'][] = array("ref" => "/".$res['name']."", "name" => ucfirst($res['name']) );
 		}
@@ -93,7 +94,7 @@ class Config{
 		    $this->config['javascript'][] = array("ref" => "/rsc/js/".$res2['js']);
 		
 		}
-		$result2->finalize();
+	      $result2->finalize();
 		
 	    }
 	    $result->finalize();

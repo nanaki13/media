@@ -49,15 +49,20 @@ public class ImageRsize extends Application{
 			BufferedImage originalImage;
 			try {
 				originalImage = ImageIO.read(p.toFile());
-				File file = new File("/home/jonathan/Documents/site_julia/image_resized/" + p.getFileName());
-				int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-				if(!file.exists()){
-					BufferedImage resizeImageJpg = resizeImageWithHint(originalImage, type);
-					ImageIO.write(resizeImageJpg, "jpg",
-							file);
+				if(originalImage != null){
+					File file = new File("/home/jonathan/Documents/site_julia/image_resized/" + p.getFileName());
+					int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+					if(!file.exists()){
+						BufferedImage resizeImageJpg = resizeImageWithHint(originalImage, type);
+						ImageIO.write(resizeImageJpg, "jpg",
+								file);
+					}else{
+						System.out.println("Already exists, skeep");
+					}
 				}else{
-					System.out.println("Already exists, skeep");
+					System.out.println("p.toFile() -> read -> null");
 				}
+				
 				
 				
 

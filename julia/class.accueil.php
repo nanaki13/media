@@ -45,7 +45,7 @@ class Page implements PageI
 
     public function __construct($config)
     {
-	$configPage = $config[$_GET['page'];
+	$configPage = $config[$_GET['page']];
  	$this->title =$configPage['haveMenu'];
 	$this->title =$configPage['haveBackground'];
 	$this->title =$configPage['title'];

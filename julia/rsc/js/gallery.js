@@ -19,8 +19,8 @@ function extractDim(dimS){
 
 
 
-function addEvent(o,jsonMedia,i){
-	o.click(function() {
+function addEvent(o,div,jsonMedia,i){
+	div.click(function() {
 	  // timer =setTimeout(channgeSize,40,o);
   currentId.attr("src",o.attr("src") );
   currentId.gal_id=i;
@@ -31,6 +31,7 @@ function addEvent(o,jsonMedia,i){
     root_slider.css("display","block");
     gallery_cont.css("display","none");
     background_slider.height($(window).height());
+    
    
 })}
 
@@ -73,10 +74,11 @@ continu = true;
 i = 0;
 while (continu){
 	var img = $('#gal_'+i);
+	var div = $('#gal_div_'+i);
 	var jsonMedia = gal[i];
 	if(img.length){
 		
-		addEvent(img,jsonMedia,i);
+		addEvent(img,div,jsonMedia,i);
 	}else{
 		continu = false;
 	}

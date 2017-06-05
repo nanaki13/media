@@ -15,7 +15,12 @@
       $obj->$field($value);
     }
   }
-  
+  function warp($balise, $attrs){
+	 echo '<'.$balise.' '.$attrs.' >';
+  }
+  function endwarp($balise){
+	 echo '</'.$balise.'>';
+  }
   function toJson($obj){
    
     $json = '{';

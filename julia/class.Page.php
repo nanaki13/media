@@ -12,6 +12,15 @@ class Page
   private $cssItems;
   private $gallery;
   private $javascript;
+  private $login;
+  
+  public function login($login){
+  	$this->login = $login;
+  }
+  public function get_login(){
+  	return $this->login;
+  }
+  
    public function haveSubMenu($haveSubMenu){
       $this->haveSubMenu = $haveSubMenu;
   }
@@ -84,7 +93,7 @@ class Page
 
 	public function echoBody()
     {
-	
+	if(!$this->login) warp('div','id=left');
 	if($this->haveTitleSection){
 		$local = $this->titleSection;
 		require('title.php');	
@@ -93,6 +102,8 @@ class Page
 		$menuItems = $this->menuItems;
 		require('menu.php');	
 	}
+	if(!$this->login) endwarp('div');
+	if(!$this->login && $this->haveBackground) warp('div','id=right');
 	if($this->haveSubMenu){
 		$subMenuItems = $this->subMenuItems;
 		require('subMenu.php');		
@@ -104,6 +115,12 @@ class Page
 		$local = $this->gallery;
 		require('gallery.php');	
 		require('slider.php');
+	}
+	if(!$this->login && $this->haveBackground) endwarp('div');
+	
+	if( isset($this->login) && $this->login){
+		
+		require('login.php');
 	}
 	
 	

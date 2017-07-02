@@ -2,21 +2,21 @@
 
 <div id="gallery_cont" class="gallery_cont">
 	
-
+	
 	
 	<script type="text/javascript">var gal =[];
 <?php	foreach($local as $media){?>
 			gal.push(<?php echo $media->toJson() ?>);
 
-		
+		</script>
 <?php
 }
-;
 $i =0;
 
-?>
-var eventEnable = <?php echo isLogged() ?> != 1;
-</script><div  class="gallery_inner_cont"><?php
+$sizeSur3 =(int) (sizeof($local)/3) ;
+// echo 'sise of / 3'.$sizeSur3 ;
+$count = 0;
+?><div  class="gallery_inner_cont"><?php
 $col_prev = -1;
 foreach($local as $media){
 	$col = $media->get_column();
@@ -35,14 +35,14 @@ foreach($local as $media){
 			<div class="topright_background">
 			
 			</div>
-			<div class="label"><?php require 'image_desc.php'; ?></div>
+			<div class="label"><?php echo  $media->get_id().'<br/>'. $media->get_title().'<br/>'.$media->get_date().'<br/>'.$media->get_dimension().'<br/>'.$media->get_description()?></div>
 			
 		
 		</div>
 		
 		<?php
 
-
+	$count++;
 $i++;
 }
 

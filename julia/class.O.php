@@ -1,5 +1,7 @@
 <?php
 class O {
+	
+	
 	public function __construct($data){
 		c($this,$data);
 	

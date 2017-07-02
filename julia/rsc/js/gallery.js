@@ -72,7 +72,7 @@ btnLeft.click(function(){
 });
 continu = true;
 i = 0;
-while (continu){
+while (continu && eventEnable){
 	var img = $('#gal_'+i);
 	var div = $('#gal_div_'+i);
 	var jsonMedia = gal[i];
@@ -85,7 +85,8 @@ while (continu){
 	
 	i++;
 }
-slider.click(function(){root_slider.css("display","none"); gallery_cont.css("display","block");});
+slider.click(function(){root_slider.css("display","none");
+gallery_cont.css("display","block");});
 
 
 

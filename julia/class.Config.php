@@ -39,86 +39,75 @@ class Config{
 			
 			
 			$this->page = str_replace("-"," ", sql_format( $this->page));
-// 			echo $this->page;
-// 			echo $this->parent;
-			$sql = "select * from page_config where name = '".sql_format( $this->page)."' and parent ".equalOrNullSQL($this->parent);
-// 			 echo $sql;
-			$result = $db->query($sql);
+
+			$dao = new Dao($db);
+			if(getPage() == 'update_image'){
+				$img = new ImageGallery($_POST);
+				$dao->save($img);
+				header('Location: /'.$_POST['page_red']);
+				$_GET['page'] = $_POST['page_red'];
+				$this->page = str_replace("-"," ", sql_format( $_GET['page']));
+			}
+			if(getPage() == 'upload_form'){
+				require 'upload.php';
+			}
+			$this->config = $dao->getBasePageConfig($this->page,$this->parent);
+			
 			$havRes = false;
-			while($res = $result->fetchArray(SQLITE3_ASSOC)){
-// 				echo 'reslut';
-				$havRes = true;
-				$this->config =
-				array(
-						"haveMenu" => $res['haveMenu'],
-						"haveBackground" =>  $this->page == 'accueil',
-						"haveSubMenu" =>  $res['haveSubMenu'],
-						"title" => $res['title'].' - '.$res['subTitle'],
-						"cssItems" => array ( ),
-						"javascript" => array ( ),
-						"haveTitleSection" => $res['title'],
-						"titleSection" => array ("title" => $res['title'], "subTitle" => $res['subTitle'])
-				);
+			if($this->config != false){
+				
 				if($this->page == "login"){
-					if(isset($_POST["login"])){
+					
+					if(!isLogged() && isset($_POST["login"])){
 						$loginName = $_POST["login"];
+						$pass = $_POST["password"];
 						
-						$result2 = $db->query("select name, password from user where name = '".$loginName."'");
-						while($res = $result2->fetchArray(SQLITE3_ASSOC)){
+						$result2 = $db->query("select name, password from user where name = '".strtolower($loginName)."' and password = '".$pass."'" );
+						if($res = $result2->fetchArray(SQLITE3_ASSOC)){
 							
 							$user = new User($res);
-							echo $user->toJson();
+							
+							$_SESSION['logged'] = true;
+							header('Location: index.php');
 						
+						}else{
+							echo 'mauvais user ou mdp';
 						}
+					}elseif (isLogged() && isset($_POST["logout"])){
+						unset($_SESSION['logged']);
+						header('Location: index.php');
 					}
-					$this->config["login"] = true;
 					
 				}
-// 				if( $this->page != "accueil" && !isset($this->parent)){
-// 					$result2 = $db->query("select technique.code tech_code,image.name image_name,theme.name theme_name, image_path.path image_path from technique
-// 		      join technique_theme on technique.code = technique_theme.tech_code
-// 		      join image on image.id = technique_theme.image_key
-// 		      join image_path on image.id = image_path.image_key and width = '1200'
-// 		    join theme on theme.id = technique_theme.theme_key where technique.name = '". $this->page."'");
-// 					$this->config['subMenuItems']= array();
-// 					while($res = $result2->fetchArray(SQLITE3_ASSOC)){
-		
-// 						$this->config['subMenuItems'][]=array("ref"=>str_replace(" ","-", $res['theme_name']),"name"=>$res['theme_name'],"img"=>$res['image_path']);
-		
-// 					}
-// 					$result2->finalize();
-		
-// 				}else 
-					if($this->page != "accueil"){
-					$sql = "select * from oeuvre
-		join theme on oeuvre.theme_key = theme.id
-		join image on image.id = oeuvre.image_key
-		join image_path on image.id = image_path.image_key and width=1200
-		where theme.name='".$this->page."'";
-// 					echo $sql;
-					$this->config['gallery']= array();
-					$result2 = $db->query($sql);
-		
-		
-					while($res = $result2->fetchArray(SQLITE3_ASSOC)){
-		
-						$imageGallery  = new ImageGallery();
-		
-						c($imageGallery,$res);
-						$this->config['gallery'][]=$imageGallery;
-		
-		
+				if($this->page == "images"){
+					$all_media = $dao->getAllOeuvres();	
+					$this->config['all_media_map'] = [];
+					foreach ($all_media as $m){
+						
+						$this->config['all_media_map'][$m->get_path()] = true;
 					}
 				}
-				$this->config['menuItems']  = array(array("ref" => "/accueil", "name" => "Acceuil","img_path" => "/rsc/img/fleur_1.jpg" ));
-				$result2 = $db->query("select * from theme ");
-				while($res = $result2->fetchArray(SQLITE3_ASSOC)){
-					$this->config['menuItems'][] = array("ref" => "/".str_replace(" ","-",$res['name'])."", "name" => ucfirst($res['name']) );
+					if($this->page != "accueil"){
+						
+						$this->config['gallery'] = $dao->getOeuvres($this->page);
+					
+					}
+				if($this->config['haveMenu']){
+					$this->config['menuItems']  = array(array("ref" => "/accueil", "name" => "Acceuil","img_path" => "/rsc/img/fleur_1.jpg" ));
+					$result2 = $db->query("select * from theme ");
+					while($res = $result2->fetchArray(SQLITE3_ASSOC)){
+						$this->config['menuItems'][] = array("ref" => "/".str_replace(" ","-",$res['name'])."", "name" => ucfirst($res['name']) );
+					}
+					$result2->finalize();
+					$this->config['menuItems'][] = array("ref" => "/apropos", "name" => "A propos" );
+						
+					$this->config['menuItems'][] =array("ref" => "/contact", "name" => "Contact" );
+					if(isLogged()){
+						$this->config['menuItems'][] =array("ref" => "/images", "name" => "images" );
+						$this->config['menuItems'][] =array("ref" => "/upload", "name" => "upload" );
+					}
 				}
-				$result2->finalize();
-				$this->config['menuItems'][] = array("ref" => "/apropos", "name" => "A propos" );
-				 
-				$this->config['menuItems'][] =array("ref" => "/contact", "name" => "Contact" );
+				
 		
 				$result2 = $db->query("select * from page_css where page = '". $this->page."' or page = 'DEFAULT'");
 				while($res2 = $result2->fetchArray(SQLITE3_ASSOC)){
@@ -134,8 +123,8 @@ class Config{
 				$result2->finalize();
 		
 			}
-			$result->finalize();
-			return $havRes;
+
+			return $this->config != false;
 			 
 			//print_r($this->config);
 		}finally{

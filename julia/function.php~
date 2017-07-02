@@ -10,24 +10,16 @@
     return isset($_GET['subPage']) && $_GET['subPage'] != '' ? $_GET['subPage'] : null;
   }
   
-  function isLogged(){
-  	return isset($_SESSION['logged']) && $_SESSION['logged'];
-  }
-  
   function c($obj,$data){
      foreach($data as $field=>$value){
-     	//echo $field." = ".$value;
-     	if(method_exists($obj,$field )){
-     		$obj->$field($value);
-     	}
-      		
+      $obj->$field($value);
     }
   }
   function warp($balise, $attrs){
 	 echo '<'.$balise.' '.$attrs.' >';
   }
   function endwarp($balise){
-	 echo '</'.$balise.'>';
+	 echo '<'.$balise.'/>';
   }
   function toJson($obj){
    

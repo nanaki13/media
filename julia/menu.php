@@ -14,6 +14,9 @@ foreach($menuItems as $menuItem){
 	}
 }
 ?>
+<img id="img_menu_3" class="menu_item_div" src = "/rsc/img/branche_2.png"/>
+
 
 </div>	
+
 

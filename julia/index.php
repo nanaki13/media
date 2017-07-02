@@ -15,9 +15,12 @@ include 'function.php';
 //
 
 try{
+  session_start();	
+ 
+ 
   $conf = new Config(getPage(),getSubPage());
-  $obj1 = new Request($_SERVER);
-  $obj1->process($conf->getConfig());
+  $request = new Request($_SERVER);
+  $request->process($conf->getConfig());
   
 }catch(Exception $e){
   if($e->getMessage() == "404"){

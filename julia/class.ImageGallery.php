@@ -1,5 +1,5 @@
 <?php 
-class ImageGallery 
+class ImageGallery extends O
 {
 private $id;
 private $title;
@@ -13,6 +13,8 @@ private $name;
 private $height;
 private $width;
 private $path;
+private $row;
+private $column;
 
 public function id($id){
 	$this->id = $id;
@@ -50,7 +52,12 @@ public function width($width){
 public function path($path){
 	$this->path = $path;
 	}
-
+public function row($row){
+	$this->row = $row;
+}
+public function column($column){
+	$this->column = $column;
+}
 public function get_id(){
 	return $this->id;
 	}
@@ -87,6 +94,13 @@ public function get_width(){
 public function get_path(){
 	return $this->path;
 	}
+	public function get_row(){
+		return $this->row;
+	}
+	public function get_column(){
+		return $this->column;
+	}
+	
 	public function toJson(){
     return toJson($this);
   }

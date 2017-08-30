@@ -5,6 +5,7 @@
 $imgs = glob("./rsc/img/*.jpg");
 
 foreach ($imgs as $img){
+	$abso = str_replace("./","/", $img);
 	$isUsed =isset($all_media_map[ str_replace("./rsc","", $img)]);
  ?>
 	<div class="gallery_all" >
@@ -12,7 +13,7 @@ foreach ($imgs as $img){
 		<a href="/admin/createArtFromPath?path=<?php echo $abso; ?>">
 <?php }?>
 		<img class="gallery_image<?php 
-	$abso = str_replace("./","/", $img);
+	
 	if($isUsed)  echo "_used"; else  echo ""?>" src="<?php echo $abso; ?>" />	 
 	<?php echo $abso; ?>
 <?php 	if (!$isUsed){ ?>

@@ -7,7 +7,7 @@ foreach ($get_method as $name){
 	$get_met = 'get_'.$name;
 	?>
 	
-	<label for="<?php echo $name?>"><?php echo $name?></label><input type="text" value="<?php echo $media->$get_met() ?>" name="<?php echo $name?>"/></br>
+	<label for="<?php echo $name?>"><?php echo $name?></label><input type="text" value="<?php echo $media->$get_met() ?>" name="<?php echo $name?>"/><br/>
 	<?php 
 }
 	?>

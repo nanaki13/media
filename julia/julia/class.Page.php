@@ -1,4 +1,8 @@
 <?php 
+/**
+ * @author jonathan
+ *
+ */
 class Page 
 {
   private $title;
@@ -16,6 +20,16 @@ class Page
   private $name;
   private $all_media_map;
   private $themes;
+  private $techniques;
+  
+  
+  public function techniques($techniques){
+  	 
+  	$this->techniques = $techniques;
+  }
+  public function get_techniques(){
+  	return $this->techniques;
+  }
   public function themes($themes){
   	
   	$this->themes = $themes;
@@ -163,6 +177,8 @@ class Page
 			}else if($this->name == 'createArtFromPath'){
 				$get_method = ['title','description','date','dimension'];
 				$themes = $this->themes;	
+				$techniques = $this->techniques;
+				$path = $_GET['path'];
 			}
 			
 			if(!$page_set){

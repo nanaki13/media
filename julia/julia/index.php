@@ -17,15 +17,20 @@ include 'function.php';
 try{
   session_start();	
  
- 
+  
   $conf = new Config(getPage(),getSubPage());
-  $request = new Request($_SERVER);
-  $request->process($conf->getConfig());
+  if(getPage()=='admin'  && ! isLogged()){
+  	throw new Exception('401');
+  }else{
+  	$request = new Request($_SERVER);
+  	$request->process($conf->getConfig());
+  }
+  
   
 }catch(Exception $e){
-  if($e->getMessage() == "404"){
-      echo "404";
-      http_response_code(404);
+  if(preg_match('/[0-9]*/',$e->getMessage() )){
+      echo $e->getMessage();
+      http_response_code($e->getMessage());
   }else{
     throw $e;
   }

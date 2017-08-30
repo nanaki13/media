@@ -37,23 +37,30 @@ class Config{
 
 		try{
 			
-			
+			$havRes = false;
 			$this->page = str_replace("-"," ", sql_format( $this->page));
-
 			$dao = new Dao($db);
 			
 			if(getPage() == 'update_image'){
 				$img = new ImageGallery($_POST);
 				$dao->save($img);
-				header('Location: /'.$_POST['page_red']);
-				$_GET['page'] = $_POST['page_red'];
-				$this->page = str_replace("-"," ", sql_format( $_GET['page']));
+ 				header('Location: /'.$_POST['page_red']);
+ 				$_GET['page'] = $_POST['page_red'];
+ 				$this->page = str_replace("-"," ", sql_format( $_GET['page']));
 			}elseif(getPage() == 'upload_form'){
 				require 'upload.php';
+			}elseif(getSubPage() == 'createOeuvre'){
+				require 'createOeuvre.php';
+				header('Location: /admin/images');
+				$this->parent = $_GET['page'] = 'admin';
+				$this->page = $_GET['subPage'] = 'images';
+				$havRes = true;
+			}elseif(getPage() == 'upload_form'){
+				$havRes = true;
 			}
 			$this->config = $dao->getBasePageConfig($this->page,$this->parent);
 			
-			$havRes = false;
+			
 			if($this->config != false){
 				
 				if($this->page == "login"){
@@ -91,7 +98,9 @@ class Config{
 					);
 				}elseif($this->page == "createArtFromPath"){
 					$themes = $dao->getAllThemes();
+					$thechniques =$dao->getAll('technique');
 					$this->config['themes'] = $themes;
+					$this->config['techniques'] = $thechniques;
 				}
 				if($this->page == "images"){
 					$all_media = $dao->getAllOeuvres();	

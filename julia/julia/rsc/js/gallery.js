@@ -85,6 +85,9 @@ while (continu && eventEnable){
 	
 	i++;
 }
+if(!eventEnable){
+	$( ".label" ).css( "display", "block" );
+}
 slider.click(function(){root_slider.css("display","none");
 gallery_cont.css("display","block");});
 

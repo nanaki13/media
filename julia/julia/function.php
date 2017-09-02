@@ -34,22 +34,26 @@
 	 echo '</'.$balise.'>';
   }
   function toJson($obj){
-   
-    $json = '{';
-    $ar = (array) $obj;
-     $count= count($ar)	;
-     $i = 0;
-    foreach($ar as $field=>$value){
+//   	$string = 'toto';
+//   	foreach ((array)$obj as $key =>$value){
+//   		$string .= $key. '-> '. $value;
+//   	}
+   return json_encode($obj->toArray());
+//     $json = '{';
+//     $ar = (array) $obj;
+//      $count= count($ar)	;
+//      $i = 0;
+//     foreach($ar as $field=>$value){
       
-      $json .=  preg_replace("/[^A-Za-z0-9 ]/",'',$field). ' : "'.$value.'"';
-      if($i != $count -1){
-	   $json = $json .',';
-      }
-      $i++;
-    }
-     $json = $json .'}';
+//       $json .=  preg_replace("/[^A-Za-z0-9 ]/",'',$field). ' : "'.$value.'"';
+//       if($i != $count -1){
+// 	   $json = $json .',';
+//       }
+//       $i++;
+//     }
+//      $json = $json .'}';
      
-    return $json;
+//     return $json;
   }
   
   function replaceSpace($ch){

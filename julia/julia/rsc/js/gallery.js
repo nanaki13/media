@@ -1,11 +1,12 @@
 var currentId = $('#current_image');
 var currentTitle = $('#current_image_title');
-var currentTech = $('#current_image_description');
+var currentTech = $('#slider_description');
 var root_slider = $('#root_slider');
 var slider = $("#slider");
 var background_slider = $('#background_slider');
 var root = $('#root');
 var gallery_cont  = $('#gallery_cont');
+
 var continu = true;
 var i = 0;
 var dimChange = false;
@@ -15,7 +16,12 @@ function extractDim(dimS){
   return dimS.substring(0,dimS.length-2)
 }
 
-  
+
+function mediaHtml(media){
+	
+	return '<span class="italic upper">'+media.title+'</span>'+"<br/>"+media.date+"<br/>"+media.dimension+'<br/>'+media.description;
+	
+}
 
 
 
@@ -25,9 +31,8 @@ function addEvent(o,div,jsonMedia,i){
   currentId.attr("src",o.attr("src") );
   currentId.gal_id=i;
   //alert(jsonMedia.Mediatitle);
-  currentTitle.text(jsonMedia.ImageGallerytitle);
-  currentTech.text(jsonMedia.ImageGallerydescription+","+jsonMedia.ImageGallerydate);
-   
+//  currentTitle.text(jsonMedia.title);
+  currentTech.html(mediaHtml(jsonMedia));
     root_slider.css("display","block");
     gallery_cont.css("display","none");
     background_slider.height($(window).height());
@@ -43,11 +48,10 @@ btnRight.click(function(){
 	if(tmpI>= gal.length){
 		tmpI=0;
 	}
-	currentId.attr("src","/rsc/"+gal[tmpI].ImageGallerypath );
+	currentId.attr("src","/rsc/"+gal[tmpI].path );
 	currentId.gal_id =tmpI	 ;
-	  //alert(jsonMedia.Mediatitle);
-	  currentTitle.text(gal[tmpI].ImageGallerytitle);
-	    currentTech.text(gal[tmpI].ImageGallerydescription+","+gal[tmpI].ImageGallerydate);
+
+	currentTech.html(mediaHtml(gal[tmpI]));
 	
 	
 	
@@ -56,16 +60,16 @@ btnRight.click(function(){
 var btnLeft = $("#btnLeft");
 btnLeft.click(function(){
 	var tmpI = currentId.gal_id;
-//	alert(tmpI);
+	
 	tmpI--;
 	if(tmpI< 0){
 		tmpI=gal.length-1;
 	}
-	currentId.attr("src","/rsc/"+gal[tmpI].ImageGallerypath );
+	currentId.attr("src","/rsc/"+gal[tmpI].path );
 	currentId.gal_id =tmpI	 ;
 	  //alert(jsonMedia.Mediatitle);
-	  currentTitle.text(gal[tmpI].ImageGallerytitle);
-	    currentTech.text(gal[tmpI].ImageGallerydescription+","+gal[tmpI].ImageGallerydate);
+//	  currentTitle.text(gal[tmpI].title);
+	    currentTech.html(mediaHtml(gal[tmpI]));
 	
 	
 	
@@ -77,7 +81,6 @@ while (continu && eventEnable){
 	var div = $('#gal_div_'+i);
 	var jsonMedia = gal[i];
 	if(img.length){
-		
 		addEvent(img,div,jsonMedia,i);
 	}else{
 		continu = false;

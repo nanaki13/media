@@ -130,20 +130,52 @@ body {
 	top: 50%;
 	right: 0;
 	position: absolute;
-	background-color: gold;
+/*	background-color: gold;*/
+	width: 5%;
+	height: 5%;
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#btnRight>img{
+	width: 30px;
+	
+}
+.upper{
+	font-size: 1.2em;
+}
+.italic { 
+font-style: italic; 
+
+}
+
+#btnLeft>img{
+	width: 30px;
+}
+
+#btnLeft {
+	text-align: center;
+	vertical-align: middle;
+	top: 50%;
+	left: 0;
+	position: absolute;
+/*	background-color: gold;*/
 	width: 5%;
 	height: 5%;
 	display: block;
 }
 
-#btnLeft {
-	top: 50%;
-	left: 0;
+#slider_description{
+	bottom: 7%;
+	left: 1%;
+	max-width:8%;
 	position: absolute;
-	background-color: gold;
-	width: 5%;
-	height: 5%;
-	display: block;
+/* 	background-color: blue; */
+/* 	width: 5%; */
+/* 	height: 5%; */
+/* 	display: block;	 */
+	color: white;
 }
 
 .slider {

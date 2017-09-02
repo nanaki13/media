@@ -19,7 +19,7 @@ foreach ($get_method as $name){
 }else{
 	echo
 
-	$media->get_title().
+	'<span class="italic">'.$media->get_title().'</span>'.
 	'<br/>'.$media->get_date().'<br/>'.$media->get_dimension().'<br/>'.$media->get_description();
 }
 ?>

@@ -5,5 +5,6 @@
 		<img class="image_back" src="./rsc/img/les oiseaux du jardin des plantes_g_acc.jpg" alt="4"/>
 		<img class="image_back" src="./rsc/img/Portrait de fleur_p_acc.jpg" alt="5"/>
 		<img class="image_back" src="./rsc/img/sans_nom_g_acc.jpg" alt="6"/>
-		<img class="image_back" src="./rsc/img/Le bouquet_p_acc.jpg" alt="7"/>
+		<img class="image_back" src="./rsc/img/La dentellière.jpg" alt="7"/>
+		<img class="image_back" src="/rsc/img/jeanne à la fenêtre.jpg" alt="8"/>
 </div>	

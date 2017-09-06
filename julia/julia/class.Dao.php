@@ -217,7 +217,7 @@ class Dao{
 						"haveBackground" =>  $page == 'accueil',
 						"haveGallery" =>  $res['haveGallery'],
 						"haveSubMenu" =>  $res['haveSubMenu'],
-						"title" => $res['title'].' - '.$res['subTitle'],
+						"title" => $res['title']. (isset($res['subTitle']) ? ' - '.$res['subTitle'] : ''),
 						"cssItems" => array ( ),
 						"javascript" => array ( ),
 						"haveTitleSection" => $res['title'],

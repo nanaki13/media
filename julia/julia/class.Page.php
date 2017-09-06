@@ -182,7 +182,10 @@ class Page
 			}
 			
 			if(!$page_set){
-				require $this->name.'.php';
+                if(  file_exists( $this->name.'.php')){
+                     require $this->name.'.php';
+                }
+                   
 			}
 			if( $this->haveBackground) endwarp('div');
 		}

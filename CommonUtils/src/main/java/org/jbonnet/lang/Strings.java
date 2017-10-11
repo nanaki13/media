@@ -1,9 +1,21 @@
 package org.jbonnet.lang;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 public class Strings {
+	
+	private static final Map<Class<?>,Class<?>> primToClassMap = new HashMap<>();
+	static{
+		primToClassMap.put(Integer.TYPE, Integer.class);
+		primToClassMap.put(Short.TYPE, Short.class);
+		primToClassMap.put(Double.TYPE, Double.class);
+		primToClassMap.put(Float.TYPE, Float.class);
+		primToClassMap.put(Boolean.TYPE, Boolean.class);
+		primToClassMap.put(Long.TYPE, Long.class);
+	}
 	/**
 	 * Créer une chaine contenant les élément du tableau séparé par sep.
 	 * 
@@ -58,6 +70,9 @@ public class Strings {
 		}
 		if(type == String.class){
 			return text;
+		}
+		if(type.isPrimitive()){
+			type = primToClassMap.get(type);
 		}
 		try {
 			Method method = type.getMethod("valueOf", String.class);

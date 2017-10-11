@@ -32,14 +32,11 @@ public class MainFish extends AbstractJavaFxApplicationSupport {
 
 
 	
-	private static final int SIZE_CASE_X = 60;
-	private static final int SIZE_CASE_Y = 60;
-	private static final int MARGE = 3;
-	private static final Image FOND1 = getImage("/img/fond1.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
-	private static final Image FOND2 = getImage("/img/fond2.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
-	private static final Image FOND3 = getImage("/img/fond3.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
-	private static final Image FOND4 = getImage("/img/fond4.gif", SIZE_CASE_X - MARGE, SIZE_CASE_Y - MARGE);
-	private static final Image[] images = {FOND1,FOND2,FOND3,FOND4};
+	private static final Background LABEL_BACKGROUND = new Background(new BackgroundFill(Color.WHITE,  new CornerRadii(10),new Insets(0)));
+	public static final int SIZE_CASE_X = 60;
+	public static final int SIZE_CASE_Y = 60;
+	public static final int MARGE = 0;
+	
 	private LinkedList<Double> last3Delta = new LinkedList<>();
 
 	public static void main(String[] args) {
@@ -70,7 +67,7 @@ public class MainFish extends AbstractJavaFxApplicationSupport {
 		Duration time;
 		Label label = new Label("Voilà le début ...\nDrag souris pour bouger.\nCTRL drag souris pour zoomer.\nBref un jeux de dingue.\nCliquer moi dessus pour me jarter.");
 		label.setFont(new Font(20));
-		label.setBackground(new Background(new BackgroundFill(Color.WHITE,  new CornerRadii(10),new Insets(0))));
+		label.setBackground(LABEL_BACKGROUND);
 		label.setLayoutX(14*60);
 		label.setLayoutY(14*60);
 		label.setOnMouseClicked((e)->root.getChildren().remove(label));
@@ -88,25 +85,37 @@ public class MainFish extends AbstractJavaFxApplicationSupport {
 
 
 				
-				Plateau<Case<CaseContent, ImageView>> pl = fishEngine.getPlateau();
-				Case<CaseContent,ImageView> case1 =  pl.getCase(i, j);
+				Plateau<Case<CaseContent, Group>> pl = fishEngine.getPlateau();
+				Case<CaseContent,Group> case1 =  pl.getCase(i, j);
 				
-				Image c = getRandomImage(case1.getModel().getDeep());
+				Image c = Images.getBackgrounImage(case1.getModel().getDeep(), i, j, fishEngine.getSizeX()-1, fishEngine.getSizeY()-1);
 				ImageView p = new ImageView(c);
-				p.setY(i * SIZE_CASE_X);
-				p.setX(j * SIZE_CASE_Y);
-				case1.setView(p);
+				Group g = new Group();
+				g.setLayoutX(i * SIZE_CASE_X);
+				g.setLayoutY(j * SIZE_CASE_Y);
+				
+				g.getChildren().add(p);
+				case1.setView(g);
 				case1.setX(i);
 				case1.setY(j);
-				System.out.println( case1.getOrientation());
+				Fish f = case1.getModel().getFish();
+				if(f != null){
+					System.out.println(case1);
+					Label labelF = new Label("POISSON");
+					labelF.setFont(new Font(9));
+					labelF.setBackground(LABEL_BACKGROUND);
+					labelF.setLayoutX(SIZE_CASE_X/2);
+					labelF.setLayoutY(SIZE_CASE_Y/2);
+					g.getChildren().add(labelF);
+				}
 				Label labelOr = new Label(String.valueOf( case1.getOrientation()));
 				labelOr.setFont(new Font(9));
-				labelOr.setBackground(new Background(new BackgroundFill(Color.WHITE,  new CornerRadii(10),new Insets(0))));
+				labelOr.setBackground(LABEL_BACKGROUND);
 				labelOr.setLayoutX(i * SIZE_CASE_X);
 				labelOr.setLayoutY(j * SIZE_CASE_Y);
 //				labelOr.setDis
 				// p.setFill(c);
-				background.getChildren().add(p);
+				background.getChildren().add(g);
 				labels.getChildren().add(labelOr);
 //				root.getChildren().addAll(labelOr);
 
@@ -130,22 +139,9 @@ public class MainFish extends AbstractJavaFxApplicationSupport {
 
 
 	
-	private Image getRandomImage(Deep deep){
-		
-		return images[deep.ordinal()];
 	
-		
-		
-	}
 
-	private static Image getImage(String string, double i, double j) {
-		try (InputStream is = MainFish.class.getResourceAsStream(string);) {
-			return new Image(is, i, j, false, false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	
 
 	private void keyPressed(KeyEvent k) {
 		control = (k.getCode() == KeyCode.CONTROL);
@@ -182,7 +178,7 @@ public class MainFish extends AbstractJavaFxApplicationSupport {
 			prviousY = s.getScreenY();
 			if (Math.abs(dy) < 30) {
 
-				root.setTranslateY(root.getTranslateY() + dy);
+				root.setTranslateY(root.getTranslateY() + dy*2);
 			}
 
 			//
@@ -190,7 +186,7 @@ public class MainFish extends AbstractJavaFxApplicationSupport {
 			prviousX = s.getScreenX();
 			if (Math.abs(dx) < 30) {
 
-				root.setTranslateX(root.getTranslateX() + dx);
+				root.setTranslateX(root.getTranslateX() + dx*2);
 			}
 
 		}

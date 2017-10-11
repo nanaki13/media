@@ -30,21 +30,24 @@ public class DbConnection {
 		
 	}
 	
+	
+
 	public List<Fish> getAllFish() throws SQLException{
-		return filler.getResultList(Fish.class, Fish::new );
+		return filler.getResultList(Fish.class);
 	}
 	
-	public static void main(String[] args) throws IOException, SQLException {
-		DbConnection dbConnection = new DbConnection();
-		System.out.println(dbConnection.getAllFish());
-		System.out.println(dbConnection.filler.entityTableExists(Fish.class));
-		System.out.println(dbConnection.filler.entityTableExists(Pecheur.class));
-		if(!dbConnection.filler.entityTableExists(Pecheur.class)){
-			dbConnection.filler.createEntityTable(Pecheur.class, new SqlLiteTypeMapping(),"id");
-		}
-		
-
+	public List<Water> getAllWaters() throws SQLException{
+		return filler.getResultList(Water.class);
 	}
+	
+	public List<Pecheur> getAllPecheur() throws SQLException{
+		return filler.getResultList(Pecheur.class);
+	}
+
+
+	
+	
+	
 	
 	
 }

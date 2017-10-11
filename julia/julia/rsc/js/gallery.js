@@ -11,6 +11,7 @@ var continu = true;
 var i = 0;
 var dimChange = false;
 var timer = null;
+var position = 0;
 function extractDim(dimS){
   
   return dimS.substring(0,dimS.length-2)
@@ -33,9 +34,13 @@ function addEvent(o,div,jsonMedia,i){
   //alert(jsonMedia.Mediatitle);
 //  currentTitle.text(jsonMedia.title);
   currentTech.html(mediaHtml(jsonMedia));
+   position = $(window).scrollTop(); 
+    console.log("position get : "+position)
     root_slider.css("display","block");
     gallery_cont.css("display","none");
     background_slider.height($(window).height());
+   
+  
     
    
 })}
@@ -91,8 +96,16 @@ while (continu && eventEnable){
 if(!eventEnable){
 	$( ".label" ).css( "display", "block" );
 }
-slider.click(function(){root_slider.css("display","none");
-gallery_cont.css("display","block");});
+slider.click(function(){
+    root_slider.css("display","none");
+    gallery_cont.css("display","block");
+    console.log(position);
+    $(window).scrollTop(position); 
+    
+});
+$( window ).resize(function() {
+  background_slider.height($(window).height());
+});
 
 
 

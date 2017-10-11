@@ -19,9 +19,11 @@ public class AppBeans {
 		return 15;
 	}
 
-	@Bean
-	public FishEngine fishEngine(@Qualifier("lenth") int length, @Qualifier("height") int height) {
-		return new FishEngine(length, height);
+	@Bean(initMethod="init")
+	public FishEngine fishEngine(DbConnection con, @Qualifier("lenth") int length, @Qualifier("height") int height) {
+		FishEngine fe = new FishEngine(length, height);
+		fe.setDbConnection(con);
+		return fe;
 	}
 	
 	@Bean

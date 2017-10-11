@@ -77,6 +77,15 @@ public class Case<Model,View> {
 	public void setView(View view) {
 		this.view = view;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Case [x=" + x + ", y=" + y + "]";
+	}
+	
+	
 	
 	
 	

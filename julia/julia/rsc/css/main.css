@@ -8,6 +8,12 @@
 	top: 10px;
 	left:10px;
 }
+#copyright{
+	position: fixed;
+	bottom: 10px;
+	left:10px;
+    font-size : 0.7em;
+}
 
 .gallery_inner_cont {
 	width: 30%;
@@ -167,7 +173,7 @@ font-style: italic;
 }
 
 #slider_description{
-	bottom: 7%;
+	top: 70%;
 	left: 1%;
 	max-width:8%;
 	position: absolute;
@@ -190,11 +196,18 @@ font-style: italic;
 	margin: auto;
 	text-align: center;
 }
-
+#contact>img{
+    position:fixed;
+    bottom:0;
+    left:20%;
+    margin : 0;
+    padding : 0;
+    width : 80%;
+}
 #current_image {
-	position:;
 	width: auto;
-	max-height: 600px;
+	max-width: 90%;
+    height: 600px;
 }
 .center{
     text-align:center;
@@ -219,13 +232,13 @@ font-style: italic;
 }
 
 #left {
-	position: absolute;
+	position: fixed;
 	width: 20%;
 	/*float:left ;*/
 	top: 0px;
 	/*display: inline-block;*/
 }
-.right {
+.right, .right_100 {
 	position: absolute;
 	/*display: inline-block;*/
 	/*	position: fixed;*/
@@ -234,7 +247,11 @@ font-style: italic;
 	left: 20%;
 	top: 0;
 	overflow: hidden;
-	height: 100%;
+ 	
+}
+.right_100 {
+    
+    height:100%;
 }
 
 .title_main {
@@ -261,9 +278,7 @@ font-style: italic;
 	margin-left: 12px;
 	margin-right: 12px;
 	/*	padding-left: 20%;*/
-	font-size: 11px;
-	letter-spacing: 6px;
-	font-weight: 700;
+	
 	/*    text-transform: uppercase;*/
 	text-align: center;
 	/*	padding: 2% 0 2% 0;
@@ -308,14 +323,30 @@ font-style: italic;
 }
 #apropos>img{
     width:20%;
-     vertical-align:top;
+     float:left;
+     margin-right : 3%;
+     margin-bottom : 3%;
 }
-#contact{
+#apropos{
+    
+    margin-right:5%;
+}
+
+
+.text_link{
+    text-decoration:none;
+    color:black ;
     text-align:center;
-    margin-top:15%;
+   
+}
+.text_link:hover{
+    color:gold;
 }
 .margtop{
 	margin-top: 100px;
+}
+.smallmargtop{
+	margin-top: 2em;
 }
 .margleft{
 	margin-left: 100px;
@@ -325,7 +356,20 @@ font-style: italic;
 	max-width: 300px;
 	height: auto;
 }
+.title_text{
+    
+    font-weight:bold;
+}
+.twocol
+{
 
+    -webkit-column-count:2; /* Opera, Safari, Google Chrome */
+
+    -moz-column-count: 2; /* Firefox */
+
+    column-count: 2; /* Internet Explorer */
+
+}
 .img_menu {
 	position: absolute;
 	top: 100px;
@@ -373,12 +417,15 @@ font-style: italic;
 }
 
 .menu_item {
-	display: block;;
+	display: block;
 	/*	font-size: 20px ;*/
 	margin: 15% 0 0 0;
 	color: black;
 	text-decoration: none;
 	line-height: 15px;
+    font-size: 11px;
+	letter-spacing: 6px;
+	font-weight: 700;
 }
 
 .menu_item_div {
@@ -417,12 +464,14 @@ body {
 }
 
 #div_back {
+  /*  height:100%;
+    position : fixed;*/
 	/* 	overflow: hidden; */
-	/* 	height: 00%; */
+	/* 	height: 00%; */ 
 	/*z-index: -1;
 	width : 100%;
 	 
-	position : absolute;*/
+	
 	/*	text-align: center;*/
 	/*	margin-top : 3em;*/
 	/*left:0;*/

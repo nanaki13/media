@@ -1,7 +1,9 @@
 package org.jbonnet;
 
 public class Fish {
-	private String code;
+	
+	private int waterDeep;
+	private int id;
 	private int size;
 	private int weight;
 	private double proba;
@@ -14,33 +16,6 @@ public class Fish {
 	 */
 	public Fish() {
 		super();
-	}
-	/**
-	 * @param size
-	 * @param weight
-	 * @param proba
-	 * @param cost
-	 * @param code
-	 */
-	public Fish(String code,int size, int weight, double proba, double cost) {
-		super();
-		this.size = size;
-		this.weight = weight;
-		this.proba = proba;
-		this.cost = cost;
-		this.code = code;
-	}
-	/**
-	 * @return the code
-	 */
-	public String getCode() {
-		return code;
-	}
-	/**
-	 * @param code the code to set
-	 */
-	public void setCode(String code) {
-		this.code = code;
 	}
 	/**
 	 * @return the size
@@ -90,14 +65,41 @@ public class Fish {
 	public void setCost(double cost) {
 		this.cost = cost;
 	}
+	/**
+	 * @return the waterDeep
+	 */
+	public int getWaterDeep() {
+		return waterDeep;
+	}
+	/**
+	 * @param waterDeep the waterDeep to set
+	 */
+	public void setWaterDeep(int waterDeep) {
+		this.waterDeep = waterDeep;
+	}
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Fish [code=" + code + ", size=" + size + ", weight=" + weight + ", proba=" + proba + ", cost=" + cost
-				+ "]";
+		return "Fish [waterDeep=" + waterDeep + ", id=" + id + ", size=" + size + ", weight=" + weight + ", proba="
+				+ proba + ", cost=" + cost + "]";
 	}
+	
+	
+	
 	
 	
 	

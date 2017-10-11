@@ -9,8 +9,8 @@ ini_set('display_errors', 1);
 //ini_set('error_log', dirname(__file__) . '/log_error_php.txt');
 // Afficher les erreurs et les avertissements
 // error_reporting(e_all);
-include 'autoload.php';
-include 'function.php';
+include 'php/autoload.php';
+include 'php/function.php';
 
 //
 

@@ -1,17 +1,26 @@
 package org.jbonnet;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-public class Plateau<T> implements Iterable<T> {
-	List<List<T>> cases;
+public class Plateau<T> extends AbstractCollection<T> implements Iterable<T> {
+	private List<List<T>> cases;
+	
 	private int sizeY;
 	private int sizeX;
 	
+	
 	public Plateau(int sizeX , int sizeY){
 		this(sizeX,sizeY,()->null);
+		
 	}
 	
 	/**
@@ -83,4 +92,16 @@ public class Plateau<T> implements Iterable<T> {
 			}
 		};
 	}
+
+	
+	
+
+
+	@Override
+	public int size() {
+
+		return sizeX*sizeY;
+	}
+	
+	
 }
